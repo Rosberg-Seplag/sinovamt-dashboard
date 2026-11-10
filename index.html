@@ -367,6 +367,20 @@ details.sp-card[open] > summary { margin-bottom: var(--space-3); }
 .sp-panel .sp-tiles .sp-tile:not(.sp-prod-tile):nth-child(3n+1) .sp-tile-label::before { background: var(--purple-500) !important; }
 .sp-panel .sp-tiles .sp-tile:not(.sp-prod-tile):nth-child(3n+2) .sp-tile-label::before { background: var(--blue-500) !important; }
 .sp-panel .sp-tiles .sp-tile:not(.sp-prod-tile):nth-child(3n+3) .sp-tile-label::before { background: var(--green-500) !important; }
+  .sp-excluir { position: relative; }
+  .sp-excluir > summary { list-style: none; cursor: pointer; font-size: var(--cds-font-size-body); color: var(--color-fg); background: var(--color-panel); border: 1px solid var(--color-border-line); border-radius: var(--cds-radius); padding: var(--cds-pad-xs) var(--cds-pad-sm); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+  .sp-excluir > summary::-webkit-details-marker { display: none; }
+  .sp-excluir > summary::after { content: "▾"; float: right; margin-left: 6px; color: var(--color-fg-muted); }
+  .sp-excluir[open] > summary { border-color: var(--color-fg-muted); }
+  .sp-excluir-lista { position: absolute; z-index: 20; top: calc(100% + 4px); left: 0; min-width: 15rem; display: flex; flex-direction: column; gap: 2px; padding: 8px; background: var(--color-panel); border: 1px solid var(--color-border-line); border-radius: var(--cds-radius); box-shadow: 0 6px 20px rgba(0,0,0,.12); }
+  .sp-excluir-lista label { display: flex; align-items: center; gap: 8px; padding: 4px 6px; border-radius: 6px; font-size: var(--cds-font-size-body); color: var(--color-fg); cursor: pointer; white-space: nowrap; }
+  .sp-excluir-lista label:hover { background: var(--color-border-line); }
+  .sp-excluir-lista input { margin: 0; width: 15px; height: 15px; }
+  .sp-excluir > summary { display: flex; align-items: center; }
+  .sp-excluir > summary::after { float: none; margin-left: auto; padding-left: 8px; }
+  .sp-excluir-acoes { display: flex; gap: 12px; padding: 2px 6px 6px; margin-bottom: 2px; border-bottom: 1px solid var(--color-border-line); }
+  .sp-excluir-acoes button { font: inherit; font-size: var(--cds-font-size-caption); font-weight: 600; color: var(--color-accent, inherit); background: none; border: 0; padding: 2px 0; cursor: pointer; text-decoration: underline; text-underline-offset: 2px; }
+  .sp-excluir-lista .sp-excluir-nota { font-size: var(--cds-font-size-caption); color: var(--color-fg-muted); padding: 4px 6px 0; white-space: normal; }
 </style>
 </head>
 <body>
@@ -398,9 +412,12 @@ details.sp-card[open] > summary { margin-bottom: var(--space-3); }
     <label class="sp-field">Ano
       <select id="f-ano" data-draw="f-ano" data-source="inscricoes" aria-label="Ano"></select>
     </label>
-    <label class="sp-field">Produto
-      <select id="f-produto" data-draw="f-produto" data-source="inscricoes" aria-label="Produto"></select>
-    </label>
+    <div class="sp-field">Produto
+      <details class="sp-excluir" id="f-produtos">
+        <summary data-draw="f-produtos-resumo" data-source="inscricoes" aria-label="Produtos na análise">Todos os produtos</summary>
+        <div class="sp-excluir-lista" data-draw="f-produtos" data-source="inscricoes"></div>
+      </details>
+    </div>
     <label class="sp-field sp-field--wide">Ação
       <select id="f-acao" data-draw="f-acao" data-source="inscricoes" aria-label="Ação"></select>
     </label>
@@ -483,7 +500,7 @@ details.sp-card[open] > summary { margin-bottom: var(--space-3); }
 
       <div class="sp-card" id="card-sexo">
         <h2>Participação por sexo</h2>
-        <p class="sp-note">Parcela de mulheres e homens entre as pessoas que participaram. Sexo estimado pelo nome, com a base de nomes do Censo 2010 do IBGE; quem fica com sexo indefinido não entra na conta. Clique numa fatia para filtrar o painel.</p>
+        <p class="sp-note">Parcela de mulheres e homens entre as pessoas que participaram. Sexo estimado pelo nome, com a base de nomes do Censo 2010 do IBGE. Clique numa fatia para filtrar o painel.</p>
         <div class="sp-chart sp-chart--pizza dash-skeleton" id="grafico-sexo" data-draw="g-sexo" data-source="inscricoes"></div>
       </div>
     </div>
@@ -1043,7 +1060,7 @@ details.sp-card[open] > summary { margin-bottom: var(--space-3); }
 
   <!-- Insights -->
   <section class="sp-panel" id="insights" role="tabpanel" aria-labelledby="aba-insights" hidden>
-    <p class="sp-scope">Análises que cruzam anos e programas, pessoa a pessoa (sem nomes). Participou quem teve presença (no GentInova, quem está numa lista de presença de live; inscrição sozinha não conta), integrou equipe do Acelera ou inscreveu prática no Prêmio. Comparecimento e evasão usam só os cursos, que têm lista de presença. Aqui a unidade de participação é o programa no ano: quem fez várias oficinas do Outubro Movimente 2025 participou uma vez dele. Esta aba considera os filtros de poder, órgão e sexo; ano, produto e ação não se aplicam. O ano de <b data-draw="ins-andamento">—</b> ainda está em andamento, então os retornos para ele tendem a crescer. No primeiro ano dos dados (<b data-draw="ins-primeiro" data-source="inscricoes">—</b>) todos aparecem como novos, porque não há histórico anterior.</p>
+    <p class="sp-scope">Análises que cruzam anos e programas, pessoa a pessoa (sem nomes). Participou quem teve presença (no GentInova, quem está numa lista de presença de live; inscrição sozinha não conta), integrou equipe do Acelera ou inscreveu prática no Prêmio. Comparecimento e evasão usam só os cursos, que têm lista de presença. Aqui a unidade de participação é o programa no ano: quem fez várias oficinas do Outubro Movimente 2025 participou uma vez dele. Esta aba considera os filtros de poder, órgão e sexo e os produtos retirados em "Sem os produtos"; ano, produto e ação não se aplicam. O ano de <b data-draw="ins-andamento">—</b> ainda está em andamento, então os retornos para ele tendem a crescer. No primeiro ano dos dados (<b data-draw="ins-primeiro" data-source="inscricoes">—</b>) todos aparecem como novos, porque não há histórico anterior.</p>
 
     <div class="sp-subtabs" data-subabas role="tablist" aria-label="Partes da aba">
       <button type="button" role="tab" data-sub="destaques" aria-selected="true">Destaques</button>
@@ -1198,6 +1215,7 @@ details.sp-card[open] > summary { margin-bottom: var(--space-3); }
     <div class="sp-subtabs" data-subabas role="tablist" aria-label="Partes da aba">
       <button type="button" role="tab" data-sub="estado" aria-selected="true">Visão do Estado</button>
       <button type="button" role="tab" data-sub="orgaos" aria-selected="false">Por órgão</button>
+      <button type="button" role="tab" data-sub="publico" aria-selected="false">Público potencial</button>
       <button type="button" role="tab" data-sub="perfil" aria-selected="false">Perfil e cobertura</button>
     </div>
 
@@ -1252,6 +1270,65 @@ details.sp-card[open] > summary { margin-bottom: var(--space-3); }
 
     </div>
 
+    <div data-subpainel="publico" hidden>
+    <div class="sp-card" id="alc-publico">
+      <h2>Público potencial por carreira</h2>
+      <p class="sp-note">Dimensiona o público do SINOVA pela natureza da carreira, com os servidores ativos por órgão e categoria do Boletim de Indicadores de Pessoal 2025 da SEPLAG (Tabela 03, novembro de 2025). Conta vínculos, não pessoas: quem tem dois vínculos conta duas vezes. Escolha um cenário ou marque os grupos funcionais que quer incluir.</p>
+      <div class="sp-filters sp-pub-ctrl">
+        <label class="sp-field sp-field--wide">Cenário
+          <select id="f-pub-cen" aria-label="Cenário de público potencial">
+            <option value="c1">1 · Universo total</option>
+            <option value="c2">2 · Sem professores</option>
+            <option value="c3">3 · Sem Educação, Saúde, Segurança e Sistema Penitenciário</option>
+            <option value="c4">4 · Só Gestão e Fiscalização</option>
+            <option value="custom" hidden>Seleção personalizada</option>
+          </select>
+        </label>
+        <div class="sp-field sp-field--wide">Grupos funcionais
+          <details class="sp-excluir" id="f-pub-grupos">
+            <summary data-draw="pub-grupos-resumo" data-source="publico_potencial" aria-label="Grupos funcionais incluídos">Todos os grupos</summary>
+            <div class="sp-excluir-lista" data-draw="pub-grupos" data-source="publico_potencial"></div>
+          </details>
+        </div>
+      </div>
+      <p class="sp-note" data-draw="pub-desc" data-source="publico_potencial">—</p>
+      <div class="sp-tiles">
+        <div class="sp-tile">
+          <span class="sp-tile-label">Público potencial</span>
+          <span class="sp-tile-value dash-skeleton" data-draw="kp-pub" data-source="publico_potencial">—</span>
+          <span class="sp-tile-sub" data-draw="kp-pub-sub" data-source="publico_potencial">—</span>
+        </div>
+        <div class="sp-tile">
+          <span class="sp-tile-label">Redução sobre o universo</span>
+          <span class="sp-tile-value dash-skeleton" data-draw="kp-red" data-source="publico_potencial">—</span>
+          <span class="sp-tile-sub" data-draw="kp-red-sub" data-source="publico_potencial">—</span>
+        </div>
+        <div class="sp-tile">
+          <span class="sp-tile-label">Já alcançadas nesses órgãos</span>
+          <span class="sp-tile-value dash-skeleton" data-draw="kp-alc" data-source="publico_potencial alcance_pessoas">—</span>
+          <span class="sp-tile-sub" data-draw="kp-alc-sub" data-source="publico_potencial alcance_pessoas">—</span>
+        </div>
+      </div>
+      <div class="sp-pub-grid">
+        <div class="sp-pub-bloco">
+          <h3>Por grupo funcional</h3>
+          <div class="sp-table-wrap dash-skeleton" data-draw="tb-pub-grupos" data-source="publico_potencial"></div>
+        </div>
+        <div class="sp-pub-bloco">
+          <h3>Por órgão</h3>
+          <div class="sp-table-wrap sp-pub-orgaos dash-skeleton" data-draw="tb-pub-orgaos" data-source="publico_potencial alcance_pessoas"></div>
+        </div>
+      </div>
+      <p class="sp-note">Alcance aproximado = pessoas alcançadas no órgão ÷ público potencial do órgão. É só uma referência: a folha não informa a carreira, então as alcançadas incluem todas as carreiras do órgão, e o boletim conta vínculos. Nos cenários 2 a 4 a razão tende a ficar acima da real.</p>
+      <details class="sp-pub-validar">
+        <summary data-draw="pub-validar-resumo" data-source="publico_potencial">Categorias a validar</summary>
+        <div class="sp-table-wrap" data-draw="tb-pub-validar" data-source="publico_potencial"></div>
+      </details>
+      <p class="sp-why"><b>Por que importa:</b> separa o público que o SINOVA quer de fato alcançar (por exemplo, as carreiras de gestão) das grandes carreiras finalísticas, e mostra em que órgãos esse público está concentrado.</p>
+    </div>
+
+    </div>
+
     <div data-subpainel="perfil">
     <div class="sp-grid">
       <div class="sp-card" id="alc-sexo">
@@ -1286,8 +1363,9 @@ details.sp-card[open] > summary { margin-bottom: var(--space-3); }
       <li>O órgão vem da palavra entre o @ e o primeiro ponto do e-mail. E-mails pessoais e de fora do Estado ficam como Não identificado.</li>
       <li>Aba Oficinas: cada ação dos cursos conta como um encontro (mesmo que tenha tido mais de um dia), cada oficina ou evento do Acelera como outro, e o Elas à Frente entra com o total de cada edição (turma × número de oficinas e a soma das oficinas frequentadas). Palestras, painéis, aberturas, encerramentos, pitches e Demodays são "palestras ou eventos"; o resto é oficina. Presenças registradas somam os presentes de cada encontro, então a mesma pessoa conta várias vezes: não são pessoas distintas. Comparecimento = presentes ÷ inscritos; evasão = inscritos que não compareceram ÷ inscritos; os dois somam 100%. Em três oficinas da 4ª edição do Acelera houve mais presentes do que participantes listados (12 a mais): esses presentes entram no total de presenças, mas as taxas consideram no máximo 100% de cada encontro. Encontros com zero presentes provavelmente não tiveram a presença lançada e são apontados nos destaques. A permanência compara o primeiro e o último encontro da mesma turma e só vale para programas com turma fixa.</li>
       <li><em>Insights</em>: a unidade é o programa no ano. Participou quem teve ao menos uma presença; no Acelera, todo integrante de equipe selecionada; no Prêmio, quem fez parte de uma prática inscrita; no GentInova, quem está numa lista de presença de live. Voltar no ano seguinte é participar de qualquer programa no ano seguinte. Cada pessoa é identificada pelo e-mail (ou pelo nome, sem e-mail), sem que o nome apareça no painel.</li>
-      <li>O sexo é estimado pelo nome, com a base do Censo 2010 do IBGE: vale o sexo de 80% ou mais das pessoas com aquele nome. Quando o primeiro nome é raro ou usado pelos dois sexos, valem as variantes de grafia (Thaís e Thays, Diego e Dhiego) e o segundo nome, se ele não for um sobrenome comum. Os que continuam ambíguos ficam como Indefinido. A mesma pessoa tem um só sexo em todas as inscrições.</li>
+      <li>O sexo é estimado pelo nome, com a base do Censo 2010 do IBGE: vale o sexo de 80% ou mais das pessoas com aquele nome. Quando o primeiro nome é raro ou usado pelos dois sexos, valem as variantes de grafia (Thaís e Thays, Diego e Dhiego) e o segundo nome, se ele não for um sobrenome comum. A mesma pessoa tem um só sexo em todas as inscrições.</li>
       <li>Alcance: o quadro é a folha do Poder Executivo do Portal da Transparência (posição de outubro de 2026, 34 órgãos), contada em pessoas, não em matrículas. Quem tem vínculo em dois órgãos entra num só. Cada participante foi procurado na folha pelo nome: vale o nome igual ou, quando o nome do formulário é mais curto, o único servidor com o mesmo primeiro e último nome e os demais nomes. Pessoas com o mesmo nome contam como uma. O alcance soma todos os anos, mas só de quem ainda está no quadro: quem saiu do Estado não entra na conta.</li>
+      <li>Público potencial (aba Alcance): servidores ativos por órgão e categoria do Boletim de Indicadores de Pessoal 2025 da SEPLAG (Tabela 03, competência novembro de 2025), 81.104 vínculos em 33 órgãos, contados em vínculos e não em pessoas. Cada categoria foi classificada num grande grupo funcional pela natureza da carreira, não pelo órgão; as de classificação incerta aparecem como "a validar". Os números são os do boletim, sem estimativas proporcionais. A folha do Portal da Transparência não informa a carreira, por isso o alcance aproximado compara as pessoas alcançadas de todas as carreiras do órgão com o público escolhido.</li>
       <li>Satisfação: cada pesquisa tem perguntas e escala próprias, por isso os indicadores mostram a parcela de respostas na nota máxima (Excelente, 5 numa escala de 1 a 5, ou 9 e 10 numa escala de 0 a 10), cada um só com as pesquisas que fizeram a pergunta. NPS = % de notas 9 e 10 menos % de notas de 0 a 6, só onde a recomendação vai de 0 a 10 (Acelera Gov.MT e Elas à Frente). Taxa de resposta = respostas ÷ presentes da oficina ou edição, só quando há lista de presença comparável. O ano vem da data da resposta, e no Outubro Movimente 2024 do nome do arquivo. Metodologias Ativas entra no Outubro Movimente 2024; Scrum e Jogos Sérios, sem produto, ficam em Outros. Ficam de fora uma resposta de teste da 3ª edição do Acelera, as respostas sem oficina identificada e as respostas em que a própria pessoa diz não ter participado da oficina marcada (7 do Origami no Outubro Movimente 2026, que eram da palestra de abertura, e 1 da Escrita criativa no Criativação 2026); essas respostas não são reencaixadas em outra oficina. A pasta Gentinova ainda não entrou.</li>
     </ul>
   </details>
@@ -14985,6 +15063,888 @@ Outubro Movimente,TORNEIO DE VÔLEI,CGE,Executivo MT,2026,Homem,Presente,p5364,1
 Outubro Movimente,TORNEIO DE VÔLEI,SES,Executivo MT,2026,Homem,Presente,p5365,2,2,0
 Outubro Movimente,OFICINA COMUNICAÇÃO PARA RESULTADOS,NÃO IDENTIFICADO,Não identificado,2026,Indefinido,Presente,,0,18,1
 Outubro Movimente,PALESTRA DE ENCERRAMENTO A REVOLUÇÃO DA CONEXÃO HUMANA,NÃO IDENTIFICADO,Não identificado,2026,Indefinido,Sem informação,,101,48,1
+Outubro Movimente,OFICINA OS BENEFÍCIOS DO USO DA IA E SUA APLICAÇÃO NO DIA A DIA DO SERVIÇO PÚBLICO,SEPLAG,Executivo MT,2023,Mulher,Presente,p0746,1,1,0
+Outubro Movimente,OFICINA OS BENEFÍCIOS DO USO DA IA E SUA APLICAÇÃO NO DIA A DIA DO SERVIÇO PÚBLICO,NÃO IDENTIFICADO,Não identificado,2023,Mulher,Presente,p5366,1,1,0
+Outubro Movimente,OFICINA OS BENEFÍCIOS DO USO DA IA E SUA APLICAÇÃO NO DIA A DIA DO SERVIÇO PÚBLICO,NÃO IDENTIFICADO,Não identificado,2023,Homem,Presente,p5367,1,1,0
+Outubro Movimente,OFICINA OS BENEFÍCIOS DO USO DA IA E SUA APLICAÇÃO NO DIA A DIA DO SERVIÇO PÚBLICO,NÃO IDENTIFICADO,Não identificado,2023,Homem,Presente,p5368,1,1,0
+Outubro Movimente,OFICINA OS BENEFÍCIOS DO USO DA IA E SUA APLICAÇÃO NO DIA A DIA DO SERVIÇO PÚBLICO,NÃO IDENTIFICADO,Não identificado,2023,Homem,Presente,p5369,1,1,0
+Outubro Movimente,OFICINA OS BENEFÍCIOS DO USO DA IA E SUA APLICAÇÃO NO DIA A DIA DO SERVIÇO PÚBLICO,NÃO IDENTIFICADO,Não identificado,2023,Homem,Presente,p5370,1,1,0
+Outubro Movimente,OFICINA OS BENEFÍCIOS DO USO DA IA E SUA APLICAÇÃO NO DIA A DIA DO SERVIÇO PÚBLICO,MTPREV,Executivo MT,2023,Homem,Presente,p2013,1,1,0
+Outubro Movimente,OFICINA OS BENEFÍCIOS DO USO DA IA E SUA APLICAÇÃO NO DIA A DIA DO SERVIÇO PÚBLICO,SESP,Executivo MT,2023,Mulher,Presente,p2186,1,1,0
+Outubro Movimente,OFICINA OS BENEFÍCIOS DO USO DA IA E SUA APLICAÇÃO NO DIA A DIA DO SERVIÇO PÚBLICO,SESP,Executivo MT,2023,Mulher,Presente,p2234,1,1,0
+Outubro Movimente,OFICINA OS BENEFÍCIOS DO USO DA IA E SUA APLICAÇÃO NO DIA A DIA DO SERVIÇO PÚBLICO,SEPLAG,Executivo MT,2023,Mulher,Presente,p0091,1,1,0
+Outubro Movimente,OFICINA OS BENEFÍCIOS DO USO DA IA E SUA APLICAÇÃO NO DIA A DIA DO SERVIÇO PÚBLICO,NÃO IDENTIFICADO,Não identificado,2023,Mulher,Presente,p5371,1,1,0
+Outubro Movimente,OFICINA OS BENEFÍCIOS DO USO DA IA E SUA APLICAÇÃO NO DIA A DIA DO SERVIÇO PÚBLICO,SESP,Executivo MT,2023,Mulher,Presente,p2108,1,1,0
+Outubro Movimente,OFICINA OS BENEFÍCIOS DO USO DA IA E SUA APLICAÇÃO NO DIA A DIA DO SERVIÇO PÚBLICO,CASA CIVIL,Executivo MT,2023,Mulher,Presente,p1152,1,1,0
+Outubro Movimente,OFICINA OS BENEFÍCIOS DO USO DA IA E SUA APLICAÇÃO NO DIA A DIA DO SERVIÇO PÚBLICO,DESENVOLVE MT,Executivo MT,2023,Homem,Presente,p0996,1,1,0
+Outubro Movimente,OFICINA OS BENEFÍCIOS DO USO DA IA E SUA APLICAÇÃO NO DIA A DIA DO SERVIÇO PÚBLICO,SEPLAG,Executivo MT,2023,Mulher,Presente,p0617,1,1,0
+Outubro Movimente,OFICINA OS BENEFÍCIOS DO USO DA IA E SUA APLICAÇÃO NO DIA A DIA DO SERVIÇO PÚBLICO,SES,Executivo MT,2023,Homem,Presente,p0681,1,1,0
+Outubro Movimente,OFICINA OS BENEFÍCIOS DO USO DA IA E SUA APLICAÇÃO NO DIA A DIA DO SERVIÇO PÚBLICO,NÃO IDENTIFICADO,Não identificado,2023,Homem,Presente,p5372,1,1,0
+Outubro Movimente,OFICINA OS BENEFÍCIOS DO USO DA IA E SUA APLICAÇÃO NO DIA A DIA DO SERVIÇO PÚBLICO,SEPLAG,Executivo MT,2023,Homem,Presente,p1730,1,1,0
+Outubro Movimente,OFICINA OS BENEFÍCIOS DO USO DA IA E SUA APLICAÇÃO NO DIA A DIA DO SERVIÇO PÚBLICO,SES,Executivo MT,2023,Homem,Presente,p0265,1,1,0
+Outubro Movimente,OFICINA OS BENEFÍCIOS DO USO DA IA E SUA APLICAÇÃO NO DIA A DIA DO SERVIÇO PÚBLICO,SECITECI,Executivo MT,2023,Mulher,Presente,p1827,1,1,0
+Outubro Movimente,OFICINA OS BENEFÍCIOS DO USO DA IA E SUA APLICAÇÃO NO DIA A DIA DO SERVIÇO PÚBLICO,SEJUS,Executivo MT,2023,Mulher,Presente,p0780,1,1,0
+Outubro Movimente,OFICINA OS BENEFÍCIOS DO USO DA IA E SUA APLICAÇÃO NO DIA A DIA DO SERVIÇO PÚBLICO,SEMA,Executivo MT,2023,Mulher,Presente,p0753,1,1,0
+Outubro Movimente,OFICINA OS BENEFÍCIOS DO USO DA IA E SUA APLICAÇÃO NO DIA A DIA DO SERVIÇO PÚBLICO,CGE,Executivo MT,2023,Homem,Presente,p0756,1,1,0
+Outubro Movimente,OFICINA OS BENEFÍCIOS DO USO DA IA E SUA APLICAÇÃO NO DIA A DIA DO SERVIÇO PÚBLICO,NÃO IDENTIFICADO,Não identificado,2023,Mulher,Presente,p4728,1,1,0
+Outubro Movimente,OFICINA OS BENEFÍCIOS DO USO DA IA E SUA APLICAÇÃO NO DIA A DIA DO SERVIÇO PÚBLICO,NÃO IDENTIFICADO,Não identificado,2023,Homem,Presente,p5373,1,1,0
+Outubro Movimente,OFICINA OS BENEFÍCIOS DO USO DA IA E SUA APLICAÇÃO NO DIA A DIA DO SERVIÇO PÚBLICO,SEPLAG,Executivo MT,2023,Mulher,Presente,p0151,1,1,0
+Outubro Movimente,OFICINA OS BENEFÍCIOS DO USO DA IA E SUA APLICAÇÃO NO DIA A DIA DO SERVIÇO PÚBLICO,INDEA,Executivo MT,2023,Homem,Presente,p0232,1,1,0
+Outubro Movimente,OFICINA OS BENEFÍCIOS DO USO DA IA E SUA APLICAÇÃO NO DIA A DIA DO SERVIÇO PÚBLICO,SEPLAG,Executivo MT,2023,Mulher,Presente,p0094,1,1,0
+Outubro Movimente,OFICINA OS BENEFÍCIOS DO USO DA IA E SUA APLICAÇÃO NO DIA A DIA DO SERVIÇO PÚBLICO,SES,Executivo MT,2023,Homem,Presente,p5177,1,1,0
+Outubro Movimente,OFICINA OS BENEFÍCIOS DO USO DA IA E SUA APLICAÇÃO NO DIA A DIA DO SERVIÇO PÚBLICO,SEPLAG,Executivo MT,2023,Homem,Presente,p0096,1,1,0
+Outubro Movimente,OFICINA OS BENEFÍCIOS DO USO DA IA E SUA APLICAÇÃO NO DIA A DIA DO SERVIÇO PÚBLICO,SETASC,Executivo MT,2023,Mulher,Presente,p0341,1,1,0
+Outubro Movimente,OFICINA OS BENEFÍCIOS DO USO DA IA E SUA APLICAÇÃO NO DIA A DIA DO SERVIÇO PÚBLICO,SEMA,Executivo MT,2023,Homem,Presente,p2790,1,1,0
+Outubro Movimente,OFICINA OS BENEFÍCIOS DO USO DA IA E SUA APLICAÇÃO NO DIA A DIA DO SERVIÇO PÚBLICO,SEDEC,Executivo MT,2023,Mulher,Presente,p1110,1,1,0
+Outubro Movimente,OFICINA OS BENEFÍCIOS DO USO DA IA E SUA APLICAÇÃO NO DIA A DIA DO SERVIÇO PÚBLICO,NÃO IDENTIFICADO,Não identificado,2023,Homem,Presente,p5374,1,1,0
+Outubro Movimente,OFICINA OS BENEFÍCIOS DO USO DA IA E SUA APLICAÇÃO NO DIA A DIA DO SERVIÇO PÚBLICO,FAPEMAT,Executivo MT,2023,Mulher,Presente,p0050,1,1,0
+Outubro Movimente,OFICINA OS BENEFÍCIOS DO USO DA IA E SUA APLICAÇÃO NO DIA A DIA DO SERVIÇO PÚBLICO,SES,Executivo MT,2023,Mulher,Presente,p5068,1,1,0
+Outubro Movimente,OFICINA OS BENEFÍCIOS DO USO DA IA E SUA APLICAÇÃO NO DIA A DIA DO SERVIÇO PÚBLICO,SES,Executivo MT,2023,Homem,Presente,p0684,1,1,0
+Outubro Movimente,OFICINA OS BENEFÍCIOS DO USO DA IA E SUA APLICAÇÃO NO DIA A DIA DO SERVIÇO PÚBLICO,SEPLAG,Executivo MT,2023,Mulher,Presente,p1593,1,1,0
+Outubro Movimente,OFICINA OS BENEFÍCIOS DO USO DA IA E SUA APLICAÇÃO NO DIA A DIA DO SERVIÇO PÚBLICO,SEFAZ,Executivo MT,2023,Mulher,Presente,p4738,1,1,0
+Outubro Movimente,OFICINA OS BENEFÍCIOS DO USO DA IA E SUA APLICAÇÃO NO DIA A DIA DO SERVIÇO PÚBLICO,SETASC,Executivo MT,2023,Mulher,Presente,p0176,1,1,0
+Outubro Movimente,OFICINA OS BENEFÍCIOS DO USO DA IA E SUA APLICAÇÃO NO DIA A DIA DO SERVIÇO PÚBLICO,NÃO IDENTIFICADO,Não identificado,2023,Homem,Presente,p5375,1,1,0
+Outubro Movimente,OFICINA OS BENEFÍCIOS DO USO DA IA E SUA APLICAÇÃO NO DIA A DIA DO SERVIÇO PÚBLICO,NÃO IDENTIFICADO,Não identificado,2023,Mulher,Presente,p1563,1,1,0
+Outubro Movimente,OFICINA OS BENEFÍCIOS DO USO DA IA E SUA APLICAÇÃO NO DIA A DIA DO SERVIÇO PÚBLICO,EMPAER,Executivo MT,2023,Mulher,Presente,p4742,1,1,0
+Outubro Movimente,OFICINA OS BENEFÍCIOS DO USO DA IA E SUA APLICAÇÃO NO DIA A DIA DO SERVIÇO PÚBLICO,SEPLAG,Executivo MT,2023,Mulher,Presente,p0063,1,1,0
+Outubro Movimente,OFICINA OS BENEFÍCIOS DO USO DA IA E SUA APLICAÇÃO NO DIA A DIA DO SERVIÇO PÚBLICO,NÃO IDENTIFICADO,Não identificado,2023,Homem,Presente,p5110,1,1,0
+Outubro Movimente,OFICINA OS BENEFÍCIOS DO USO DA IA E SUA APLICAÇÃO NO DIA A DIA DO SERVIÇO PÚBLICO,SEFAZ,Executivo MT,2023,Homem,Presente,p2888,1,1,0
+Outubro Movimente,OFICINA OS BENEFÍCIOS DO USO DA IA E SUA APLICAÇÃO NO DIA A DIA DO SERVIÇO PÚBLICO,SEPLAG,Executivo MT,2023,Mulher,Presente,p0145,1,1,0
+Outubro Movimente,OFICINA OS BENEFÍCIOS DO USO DA IA E SUA APLICAÇÃO NO DIA A DIA DO SERVIÇO PÚBLICO,EMPAER,Executivo MT,2023,Mulher,Presente,p0247,1,1,0
+Outubro Movimente,OFICINA OS BENEFÍCIOS DO USO DA IA E SUA APLICAÇÃO NO DIA A DIA DO SERVIÇO PÚBLICO,SEPLAG,Executivo MT,2023,Homem,Presente,p0095,1,1,0
+Outubro Movimente,OFICINA OS BENEFÍCIOS DO USO DA IA E SUA APLICAÇÃO NO DIA A DIA DO SERVIÇO PÚBLICO,SETASC,Executivo MT,2023,Mulher,Presente,p5022,1,1,0
+Outubro Movimente,OFICINA OS BENEFÍCIOS DO USO DA IA E SUA APLICAÇÃO NO DIA A DIA DO SERVIÇO PÚBLICO,SECEL,Executivo MT,2023,Mulher,Presente,p4114,1,1,0
+Outubro Movimente,OFICINA OS BENEFÍCIOS DO USO DA IA E SUA APLICAÇÃO NO DIA A DIA DO SERVIÇO PÚBLICO,SETASC,Executivo MT,2023,Mulher,Presente,p4745,1,1,0
+Outubro Movimente,OFICINA OS BENEFÍCIOS DO USO DA IA E SUA APLICAÇÃO NO DIA A DIA DO SERVIÇO PÚBLICO,EMPAER,Executivo MT,2023,Mulher,Presente,p4448,1,1,0
+Outubro Movimente,OFICINA OS BENEFÍCIOS DO USO DA IA E SUA APLICAÇÃO NO DIA A DIA DO SERVIÇO PÚBLICO,NÃO IDENTIFICADO,Não identificado,2023,Mulher,Presente,p5376,1,1,0
+Outubro Movimente,OFICINA OS BENEFÍCIOS DO USO DA IA E SUA APLICAÇÃO NO DIA A DIA DO SERVIÇO PÚBLICO,MTI,Executivo MT,2023,Indefinido,Presente,p2953,1,1,0
+Outubro Movimente,OFICINA OS BENEFÍCIOS DO USO DA IA E SUA APLICAÇÃO NO DIA A DIA DO SERVIÇO PÚBLICO,SES,Executivo MT,2023,Mulher,Presente,p4576,1,1,0
+Outubro Movimente,OFICINA OS BENEFÍCIOS DO USO DA IA E SUA APLICAÇÃO NO DIA A DIA DO SERVIÇO PÚBLICO,SEPLAG,Executivo MT,2023,Mulher,Presente,p0523,1,1,0
+Outubro Movimente,OFICINA OS BENEFÍCIOS DO USO DA IA E SUA APLICAÇÃO NO DIA A DIA DO SERVIÇO PÚBLICO,SEPLAG,Executivo MT,2023,Mulher,Presente,p0099,1,1,0
+Outubro Movimente,OFICINA OS BENEFÍCIOS DO USO DA IA E SUA APLICAÇÃO NO DIA A DIA DO SERVIÇO PÚBLICO,NÃO IDENTIFICADO,Não identificado,2023,Homem,Presente,p5377,1,1,0
+Outubro Movimente,OFICINA OS BENEFÍCIOS DO USO DA IA E SUA APLICAÇÃO NO DIA A DIA DO SERVIÇO PÚBLICO,NÃO IDENTIFICADO,Não identificado,2023,Indefinido,Presente,p5378,1,1,0
+Outubro Movimente,OFICINA OS BENEFÍCIOS DO USO DA IA E SUA APLICAÇÃO NO DIA A DIA DO SERVIÇO PÚBLICO,MTI,Executivo MT,2023,Mulher,Presente,p1286,1,1,0
+Outubro Movimente,OFICINA OS BENEFÍCIOS DO USO DA IA E SUA APLICAÇÃO NO DIA A DIA DO SERVIÇO PÚBLICO,NÃO IDENTIFICADO,Não identificado,2023,Mulher,Presente,p5051,1,1,0
+Outubro Movimente,OFICINA OS BENEFÍCIOS DO USO DA IA E SUA APLICAÇÃO NO DIA A DIA DO SERVIÇO PÚBLICO,SEPLAG,Executivo MT,2023,Mulher,Presente,p3655,1,1,0
+Outubro Movimente,OFICINA OS BENEFÍCIOS DO USO DA IA E SUA APLICAÇÃO NO DIA A DIA DO SERVIÇO PÚBLICO,SEPLAG,Executivo MT,2023,Mulher,Presente,p0158,1,1,0
+Outubro Movimente,OFICINA OS BENEFÍCIOS DO USO DA IA E SUA APLICAÇÃO NO DIA A DIA DO SERVIÇO PÚBLICO,SEMA,Executivo MT,2023,Mulher,Presente,p0217,1,1,0
+Outubro Movimente,OFICINA OS BENEFÍCIOS DO USO DA IA E SUA APLICAÇÃO NO DIA A DIA DO SERVIÇO PÚBLICO,SEDEC,Executivo MT,2023,Mulher,Presente,p3945,1,1,0
+Outubro Movimente,OFICINA OS BENEFÍCIOS DO USO DA IA E SUA APLICAÇÃO NO DIA A DIA DO SERVIÇO PÚBLICO,SEFAZ,Executivo MT,2023,Mulher,Presente,p0659,1,1,0
+Outubro Movimente,OFICINA OS BENEFÍCIOS DO USO DA IA E SUA APLICAÇÃO NO DIA A DIA DO SERVIÇO PÚBLICO,INTERMAT,Executivo MT,2023,Homem,Presente,p5045,1,1,0
+Outubro Movimente,OFICINA OS BENEFÍCIOS DO USO DA IA E SUA APLICAÇÃO NO DIA A DIA DO SERVIÇO PÚBLICO,NÃO IDENTIFICADO,Não identificado,2023,Mulher,Presente,p5379,1,1,0
+Outubro Movimente,OFICINA OS BENEFÍCIOS DO USO DA IA E SUA APLICAÇÃO NO DIA A DIA DO SERVIÇO PÚBLICO,NÃO IDENTIFICADO,Não identificado,2023,Mulher,Presente,p5380,1,1,0
+Outubro Movimente,LANÇAMENTO OUTUBRO MOVIMENTE 2021,SEFAZ,Executivo MT,2021,Homem,Presente,p5381,1,1,0
+Outubro Movimente,LANÇAMENTO OUTUBRO MOVIMENTE 2021,SINFRA,Executivo MT,2021,Homem,Presente,p1533,1,1,0
+Outubro Movimente,LANÇAMENTO OUTUBRO MOVIMENTE 2021,SESP,Executivo MT,2021,Mulher,Presente,p0408,1,1,0
+Outubro Movimente,DESAFIO DE INOVAÇÃO 2021,SESP,Executivo MT,2021,Mulher,Equipe inscrita,p0408,1,0,0
+Outubro Movimente,LANÇAMENTO OUTUBRO MOVIMENTE 2021,SEPLAG,Executivo MT,2021,Mulher,Presente,p0244,1,1,0
+Outubro Movimente,DESAFIO DE INOVAÇÃO 2021,SEPLAG,Executivo MT,2021,Mulher,Equipe inscrita,p0244,1,0,0
+Outubro Movimente,LANÇAMENTO OUTUBRO MOVIMENTE 2021,SEPLAG,Executivo MT,2021,Homem,Presente,p5382,1,1,0
+Outubro Movimente,PRESENÇA SEM OFICINA IDENTIFICADA,POLITEC,Executivo MT,2021,Mulher,Presente,p0743,1,1,0
+Outubro Movimente,DESAFIO DE INOVAÇÃO 2021,POLITEC,Executivo MT,2021,Mulher,Equipe inscrita,p0743,1,0,0
+Outubro Movimente,LANÇAMENTO OUTUBRO MOVIMENTE 2021,SEPLAG,Executivo MT,2021,Mulher,Presente,p0454,1,1,0
+Outubro Movimente,DESAFIO DE INOVAÇÃO 2021,SINFRA,Executivo MT,2021,Mulher,Equipe inscrita,p1777,1,0,0
+Outubro Movimente,DESAFIO DE INOVAÇÃO 2021,SES,Executivo MT,2021,Homem,Equipe inscrita,p5383,1,0,0
+Outubro Movimente,PRESENÇA SEM OFICINA IDENTIFICADA,NÃO IDENTIFICADO,Não identificado,2021,Mulher,Presente,p5384,1,1,0
+Outubro Movimente,DESAFIO DE INOVAÇÃO 2021,SEPLAG,Executivo MT,2021,Mulher,Equipe inscrita,p0431,1,0,0
+Outubro Movimente,PRESENÇA SEM OFICINA IDENTIFICADA,INDEA,Executivo MT,2021,Homem,Presente,p0232,1,1,0
+Outubro Movimente,PRESENÇA SEM OFICINA IDENTIFICADA,SES,Executivo MT,2021,Homem,Presente,p5385,1,1,0
+Outubro Movimente,LANÇAMENTO OUTUBRO MOVIMENTE 2021,SEPLAG,Executivo MT,2021,Mulher,Presente,p1040,1,1,0
+Outubro Movimente,DESAFIO DE INOVAÇÃO 2021,SEPLAG,Executivo MT,2021,Mulher,Equipe inscrita,p1040,1,0,0
+Outubro Movimente,DESAFIO DE INOVAÇÃO 2021,SEPLAG,Executivo MT,2021,Mulher,Equipe inscrita,p1147,1,0,0
+Outubro Movimente,LANÇAMENTO OUTUBRO MOVIMENTE 2021,SEAF,Executivo MT,2021,Mulher,Presente,p1512,1,1,0
+Outubro Movimente,LANÇAMENTO OUTUBRO MOVIMENTE 2021,SEFAZ,Executivo MT,2021,Homem,Presente,p2403,1,1,0
+Outubro Movimente,PRESENÇA SEM OFICINA IDENTIFICADA,SES,Executivo MT,2021,Mulher,Presente,p5386,1,1,0
+Outubro Movimente,LANÇAMENTO OUTUBRO MOVIMENTE 2021,SES,Executivo MT,2021,Homem,Presente,p0872,1,1,0
+Outubro Movimente,DESAFIO DE INOVAÇÃO 2021,SES,Executivo MT,2021,Homem,Equipe inscrita,p0872,1,0,0
+Outubro Movimente,PRESENÇA SEM OFICINA IDENTIFICADA,SEFAZ,Executivo MT,2021,Homem,Presente,p5387,1,1,0
+Outubro Movimente,DESAFIO DE INOVAÇÃO 2021,SEPLAG,Executivo MT,2021,Mulher,Equipe inscrita,p0063,1,0,0
+Outubro Movimente,LANÇAMENTO OUTUBRO MOVIMENTE 2021,SEAF,Executivo MT,2021,Homem,Presente,p0177,1,1,0
+Outubro Movimente,DESAFIO DE INOVAÇÃO 2021,SEPLAG,Executivo MT,2021,Mulher,Equipe inscrita,p0593,1,0,0
+Outubro Movimente,DESAFIO DE INOVAÇÃO 2021,SEPLAG,Executivo MT,2021,Mulher,Equipe inscrita,p0747,1,0,0
+Outubro Movimente,LANÇAMENTO OUTUBRO MOVIMENTE 2021,SETASC,Executivo MT,2021,Mulher,Presente,p4674,1,1,0
+Outubro Movimente,DESAFIO DE INOVAÇÃO 2021,SETASC,Executivo MT,2021,Mulher,Equipe inscrita,p4674,1,0,0
+Outubro Movimente,PRESENÇA SEM OFICINA IDENTIFICADA,SETASC,Executivo MT,2021,Mulher,Presente,p5388,1,1,0
+Outubro Movimente,LANÇAMENTO OUTUBRO MOVIMENTE 2021,AGER,Executivo MT,2021,Indefinido,Presente,p2733,1,1,0
+Outubro Movimente,PRESENÇA SEM OFICINA IDENTIFICADA,DETRAN,Executivo MT,2021,Homem,Presente,p1055,1,1,0
+Outubro Movimente,DESAFIO DE INOVAÇÃO 2021,DETRAN,Executivo MT,2021,Homem,Equipe inscrita,p1055,1,0,0
+Outubro Movimente,DESAFIO DE INOVAÇÃO 2021,SESP,Executivo MT,2021,Mulher,Equipe inscrita,p0816,1,0,0
+Outubro Movimente,LANÇAMENTO OUTUBRO MOVIMENTE 2021,INDEA,Executivo MT,2021,Mulher,Presente,p5389,1,1,0
+Outubro Movimente,LANÇAMENTO OUTUBRO MOVIMENTE 2021,SEPLAG,Executivo MT,2021,Mulher,Presente,p0363,1,1,0
+Outubro Movimente,DESAFIO DE INOVAÇÃO 2021,SESP,Executivo MT,2021,Mulher,Equipe inscrita,p4642,1,0,0
+Outubro Movimente,DESAFIO DE INOVAÇÃO 2021,SEPLAG,Executivo MT,2021,Homem,Equipe inscrita,p4616,1,0,0
+Outubro Movimente,LANÇAMENTO OUTUBRO MOVIMENTE 2021,SEDEC,Executivo MT,2021,Mulher,Presente,p1583,1,1,0
+Outubro Movimente,DESAFIO DE INOVAÇÃO 2021,PJC,Executivo MT,2021,Mulher,Equipe inscrita,p5390,1,0,0
+Outubro Movimente,LANÇAMENTO OUTUBRO MOVIMENTE 2021,SEPLAG,Executivo MT,2021,Homem,Presente,p3951,1,1,0
+Outubro Movimente,PRESENÇA SEM OFICINA IDENTIFICADA,SES,Executivo MT,2021,Mulher,Presente,p5391,1,1,0
+Outubro Movimente,PRESENÇA SEM OFICINA IDENTIFICADA,DPMT,Outros poderes e órgãos,2021,Homem,Presente,p4765,1,1,0
+Outubro Movimente,LANÇAMENTO OUTUBRO MOVIMENTE 2021,SEPLAG,Executivo MT,2021,Mulher,Presente,p0123,1,1,0
+Outubro Movimente,DESAFIO DE INOVAÇÃO 2021,INDEA,Executivo MT,2021,Homem,Equipe inscrita,p2655,1,0,0
+Outubro Movimente,LANÇAMENTO OUTUBRO MOVIMENTE 2021,SEPLAG,Executivo MT,2021,Homem,Presente,p2246,1,1,0
+Outubro Movimente,DESAFIO DE INOVAÇÃO 2021,SECITECI,Executivo MT,2021,Mulher,Equipe inscrita,p1582,1,0,0
+Outubro Movimente,LANÇAMENTO OUTUBRO MOVIMENTE 2021,SEPLAG,Executivo MT,2021,Mulher,Presente,p0709,1,1,0
+Outubro Movimente,PRESENÇA SEM OFICINA IDENTIFICADA,SEPLAG,Executivo MT,2021,Homem,Presente,p0242,1,1,0
+Outubro Movimente,DESAFIO DE INOVAÇÃO 2021,SEPLAG,Executivo MT,2021,Homem,Equipe inscrita,p0242,1,0,0
+Outubro Movimente,LANÇAMENTO OUTUBRO MOVIMENTE 2021,SECITECI,Executivo MT,2021,Homem,Presente,p5392,1,1,0
+Outubro Movimente,LANÇAMENTO OUTUBRO MOVIMENTE 2021,SEFAZ,Executivo MT,2021,Mulher,Presente,p3693,1,1,0
+Outubro Movimente,LANÇAMENTO OUTUBRO MOVIMENTE 2021,SECEL,Executivo MT,2021,Homem,Presente,p2744,1,1,0
+Outubro Movimente,DESAFIO DE INOVAÇÃO 2021,SES,Executivo MT,2021,Homem,Equipe inscrita,p5393,1,0,0
+Outubro Movimente,LANÇAMENTO OUTUBRO MOVIMENTE 2021,SEFAZ,Executivo MT,2021,Mulher,Presente,p2725,1,1,0
+Outubro Movimente,LANÇAMENTO OUTUBRO MOVIMENTE 2021,SEPLAG,Executivo MT,2021,Mulher,Presente,p5394,1,1,0
+Outubro Movimente,DESAFIO DE INOVAÇÃO 2021,SEPLAG,Executivo MT,2021,Mulher,Equipe inscrita,p0272,1,0,0
+Outubro Movimente,LANÇAMENTO OUTUBRO MOVIMENTE 2021,INDEA,Executivo MT,2021,Mulher,Presente,p0112,1,1,0
+Outubro Movimente,LANÇAMENTO OUTUBRO MOVIMENTE 2021,SEPLAG,Executivo MT,2021,Mulher,Presente,p0091,1,1,0
+Outubro Movimente,DESAFIO DE INOVAÇÃO 2021,SES,Executivo MT,2021,Mulher,Equipe inscrita,p5395,1,0,0
+Outubro Movimente,PRESENÇA SEM OFICINA IDENTIFICADA,SEPLAG,Executivo MT,2021,Mulher,Presente,p0397,1,1,0
+Outubro Movimente,PRESENÇA SEM OFICINA IDENTIFICADA,INDEA,Executivo MT,2021,Homem,Presente,p5090,1,1,0
+Outubro Movimente,LANÇAMENTO OUTUBRO MOVIMENTE 2021,CASA CIVIL,Executivo MT,2021,Homem,Presente,p4599,1,1,0
+Outubro Movimente,LANÇAMENTO OUTUBRO MOVIMENTE 2021,SEPLAG,Executivo MT,2021,Homem,Presente,p1036,1,1,0
+Outubro Movimente,PRESENÇA SEM OFICINA IDENTIFICADA,SES,Executivo MT,2021,Mulher,Presente,p5396,1,1,0
+Outubro Movimente,LANÇAMENTO OUTUBRO MOVIMENTE 2021,MTI,Executivo MT,2021,Mulher,Presente,p1286,1,1,0
+Outubro Movimente,LANÇAMENTO OUTUBRO MOVIMENTE 2021,EMPAER,Executivo MT,2021,Mulher,Presente,p0531,1,1,0
+Outubro Movimente,LANÇAMENTO OUTUBRO MOVIMENTE 2021,SESP,Executivo MT,2021,Homem,Presente,p5397,1,1,0
+Outubro Movimente,DESAFIO DE INOVAÇÃO 2021,SESP,Executivo MT,2021,Homem,Equipe inscrita,p5397,1,0,0
+Outubro Movimente,LANÇAMENTO OUTUBRO MOVIMENTE 2021,SEPLAG,Executivo MT,2021,Homem,Presente,p3963,1,1,0
+Outubro Movimente,LANÇAMENTO OUTUBRO MOVIMENTE 2021,DESENVOLVE MT,Executivo MT,2021,Homem,Presente,p5398,1,1,0
+Outubro Movimente,LANÇAMENTO OUTUBRO MOVIMENTE 2021,SEPLAG,Executivo MT,2021,Homem,Presente,p5097,1,1,0
+Outubro Movimente,LANÇAMENTO OUTUBRO MOVIMENTE 2021,SEPLAG,Executivo MT,2021,Homem,Presente,p1721,1,1,0
+Outubro Movimente,LANÇAMENTO OUTUBRO MOVIMENTE 2021,NÃO IDENTIFICADO,Não identificado,2021,Homem,Presente,p5399,1,1,0
+Outubro Movimente,PRESENÇA SEM OFICINA IDENTIFICADA,NÃO IDENTIFICADO,Não identificado,2021,Homem,Presente,p5400,1,1,0
+Outubro Movimente,LANÇAMENTO OUTUBRO MOVIMENTE 2021,SEFAZ,Executivo MT,2021,Homem,Presente,p2748,1,1,0
+Outubro Movimente,LANÇAMENTO OUTUBRO MOVIMENTE 2021,SESP,Executivo MT,2021,Mulher,Presente,p2107,1,1,0
+Outubro Movimente,LANÇAMENTO OUTUBRO MOVIMENTE 2021,SEPLAG,Executivo MT,2021,Mulher,Presente,p4780,1,1,0
+Outubro Movimente,LANÇAMENTO OUTUBRO MOVIMENTE 2021,SEPLAG,Executivo MT,2021,Mulher,Presente,p0523,1,1,0
+Outubro Movimente,LANÇAMENTO OUTUBRO MOVIMENTE 2021,DESENVOLVE MT,Executivo MT,2021,Homem,Presente,p5110,1,1,0
+Outubro Movimente,DESAFIO DE INOVAÇÃO 2021,SEPLAG,Executivo MT,2021,Mulher,Equipe inscrita,p5401,1,0,0
+Outubro Movimente,LANÇAMENTO OUTUBRO MOVIMENTE 2021,SEFAZ,Executivo MT,2021,Mulher,Presente,p4577,1,1,0
+Outubro Movimente,LANÇAMENTO OUTUBRO MOVIMENTE 2021,POLITEC,Executivo MT,2021,Mulher,Presente,p1655,1,1,0
+Outubro Movimente,PRESENÇA SEM OFICINA IDENTIFICADA,SES,Executivo MT,2021,Mulher,Presente,p1013,1,1,0
+Outubro Movimente,DESAFIO DE INOVAÇÃO 2021,SES,Executivo MT,2021,Mulher,Equipe inscrita,p1013,1,0,0
+Outubro Movimente,LANÇAMENTO OUTUBRO MOVIMENTE 2021,SEPLAG,Executivo MT,2021,Mulher,Presente,p0678,1,1,0
+Outubro Movimente,PRESENÇA SEM OFICINA IDENTIFICADA,SINFRA,Executivo MT,2021,Mulher,Presente,p1736,1,1,0
+Outubro Movimente,DESAFIO DE INOVAÇÃO 2021,SINFRA,Executivo MT,2021,Mulher,Equipe inscrita,p1736,1,0,0
+Outubro Movimente,DESAFIO DE INOVAÇÃO 2021,SESP,Executivo MT,2021,Mulher,Equipe inscrita,p0235,1,0,0
+Outubro Movimente,PRESENÇA SEM OFICINA IDENTIFICADA,SEFAZ,Executivo MT,2021,Mulher,Presente,p5402,1,1,0
+Outubro Movimente,LANÇAMENTO OUTUBRO MOVIMENTE 2021,SEFAZ,Executivo MT,2021,Mulher,Presente,p5403,1,1,0
+Outubro Movimente,DESAFIO DE INOVAÇÃO 2021,SECITECI,Executivo MT,2021,Mulher,Equipe inscrita,p2797,1,0,0
+Outubro Movimente,PRESENÇA SEM OFICINA IDENTIFICADA,SEPLAG,Executivo MT,2021,Mulher,Presente,p5404,1,1,0
+Outubro Movimente,LANÇAMENTO OUTUBRO MOVIMENTE 2021,MTI,Executivo MT,2021,Homem,Presente,p2679,1,1,0
+Outubro Movimente,LANÇAMENTO OUTUBRO MOVIMENTE 2021,SESP,Executivo MT,2021,Mulher,Presente,p5405,1,1,0
+Outubro Movimente,DESAFIO DE INOVAÇÃO 2021,SESP,Executivo MT,2021,Mulher,Equipe inscrita,p5405,1,0,0
+Outubro Movimente,DESAFIO DE INOVAÇÃO 2021,SESP,Executivo MT,2021,Mulher,Equipe inscrita,p0189,1,0,0
+Outubro Movimente,DESAFIO DE INOVAÇÃO 2021,SINFRA,Executivo MT,2021,Homem,Equipe inscrita,p4657,1,0,0
+Outubro Movimente,PRESENÇA SEM OFICINA IDENTIFICADA,SEPLAG,Executivo MT,2021,Homem,Presente,p0553,1,1,0
+Outubro Movimente,DESAFIO DE INOVAÇÃO 2021,SEPLAG,Executivo MT,2021,Homem,Equipe inscrita,p0553,1,0,0
+Outubro Movimente,LANÇAMENTO OUTUBRO MOVIMENTE 2021,SESP,Executivo MT,2021,Homem,Presente,p4575,1,1,0
+Outubro Movimente,DESAFIO DE INOVAÇÃO 2021,SESP,Executivo MT,2021,Homem,Equipe inscrita,p4575,1,0,0
+Outubro Movimente,LANÇAMENTO OUTUBRO MOVIMENTE 2021,SEPLAG,Executivo MT,2021,Mulher,Presente,p0094,1,1,0
+Outubro Movimente,PRESENÇA SEM OFICINA IDENTIFICADA,SEDEC,Executivo MT,2021,Homem,Presente,p5406,1,1,0
+Outubro Movimente,DESAFIO DE INOVAÇÃO 2021,DETRAN,Executivo MT,2021,Homem,Equipe inscrita,p2802,1,0,0
+Outubro Movimente,LANÇAMENTO OUTUBRO MOVIMENTE 2021,MTI,Executivo MT,2021,Homem,Presente,p5407,1,1,0
+Outubro Movimente,DESAFIO DE INOVAÇÃO 2021,SINFRA,Executivo MT,2021,Homem,Equipe inscrita,p0306,1,0,0
+Outubro Movimente,PRESENÇA SEM OFICINA IDENTIFICADA,SINFRA,Executivo MT,2021,Mulher,Presente,p5408,1,1,0
+Outubro Movimente,LANÇAMENTO OUTUBRO MOVIMENTE 2021,SECEL,Executivo MT,2021,Mulher,Presente,p0871,1,1,0
+Outubro Movimente,LANÇAMENTO OUTUBRO MOVIMENTE 2021,SEPLAG,Executivo MT,2021,Mulher,Presente,p0548,1,1,0
+Outubro Movimente,PRESENÇA SEM OFICINA IDENTIFICADA,CASA CIVIL,Executivo MT,2021,Mulher,Presente,p4652,1,1,0
+Outubro Movimente,LANÇAMENTO OUTUBRO MOVIMENTE 2021,SEMA,Executivo MT,2021,Mulher,Presente,p1245,1,1,0
+Outubro Movimente,LANÇAMENTO OUTUBRO MOVIMENTE 2021,SECITECI,Executivo MT,2021,Mulher,Presente,p5409,1,1,0
+Outubro Movimente,DESAFIO DE INOVAÇÃO 2021,SEFAZ,Executivo MT,2021,Homem,Equipe inscrita,p5410,1,0,0
+Outubro Movimente,PRESENÇA SEM OFICINA IDENTIFICADA,MTPAR,Executivo MT,2021,Mulher,Presente,p3353,1,1,0
+Outubro Movimente,PRESENÇA SEM OFICINA IDENTIFICADA,CGE,Executivo MT,2021,Homem,Presente,p5411,1,1,0
+Outubro Movimente,DESAFIO DE INOVAÇÃO 2021,CGE,Executivo MT,2021,Homem,Equipe inscrita,p5411,1,0,0
+Outubro Movimente,LANÇAMENTO OUTUBRO MOVIMENTE 2021,SEFAZ,Executivo MT,2021,Mulher,Presente,p3058,1,1,0
+Outubro Movimente,LANÇAMENTO OUTUBRO MOVIMENTE 2021,SEPLAG,Executivo MT,2021,Mulher,Presente,p5412,1,1,0
+Outubro Movimente,LANÇAMENTO OUTUBRO MOVIMENTE 2021,SESP,Executivo MT,2021,Mulher,Presente,p0223,1,1,0
+Outubro Movimente,DESAFIO DE INOVAÇÃO 2021,SESP,Executivo MT,2021,Mulher,Equipe inscrita,p0223,1,0,0
+Outubro Movimente,LANÇAMENTO OUTUBRO MOVIMENTE 2021,SEFAZ,Executivo MT,2021,Homem,Presente,p1757,1,1,0
+Outubro Movimente,PRESENÇA SEM OFICINA IDENTIFICADA,DETRAN,Executivo MT,2021,Mulher,Presente,p5413,1,1,0
+Outubro Movimente,LANÇAMENTO OUTUBRO MOVIMENTE 2021,DESENVOLVE MT,Executivo MT,2021,Homem,Presente,p0996,1,1,0
+Outubro Movimente,LANÇAMENTO OUTUBRO MOVIMENTE 2021,SECITECI,Executivo MT,2021,Indefinido,Presente,p2798,1,1,0
+Outubro Movimente,DESAFIO DE INOVAÇÃO 2021,SECITECI,Executivo MT,2021,Indefinido,Equipe inscrita,p2798,1,0,0
+Outubro Movimente,LANÇAMENTO OUTUBRO MOVIMENTE 2021,SEFAZ,Executivo MT,2021,Homem,Presente,p4570,1,1,0
+Outubro Movimente,LANÇAMENTO OUTUBRO MOVIMENTE 2021,SEPLAG,Executivo MT,2021,Mulher,Presente,p0979,1,1,0
+Outubro Movimente,DESAFIO DE INOVAÇÃO 2021,SEPLAG,Executivo MT,2021,Mulher,Equipe inscrita,p0753,1,0,0
+Outubro Movimente,PRESENÇA SEM OFICINA IDENTIFICADA,DPMT,Outros poderes e órgãos,2021,Homem,Presente,p5414,1,1,0
+Outubro Movimente,LANÇAMENTO OUTUBRO MOVIMENTE 2021,INDEA,Executivo MT,2021,Homem,Presente,p5415,1,1,0
+Outubro Movimente,PRESENÇA SEM OFICINA IDENTIFICADA,SETASC,Executivo MT,2021,Homem,Presente,p5416,1,1,0
+Outubro Movimente,DESAFIO DE INOVAÇÃO 2021,PGE,Executivo MT,2021,Homem,Equipe inscrita,p5417,1,0,0
+Outubro Movimente,LANÇAMENTO OUTUBRO MOVIMENTE 2021,SEFAZ,Executivo MT,2021,Mulher,Presente,p4590,1,1,0
+Outubro Movimente,PRESENÇA SEM OFICINA IDENTIFICADA,POLITEC,Executivo MT,2021,Mulher,Presente,p0194,1,1,0
+Outubro Movimente,DESAFIO DE INOVAÇÃO 2021,GOVERNADORIA,Executivo MT,2021,Homem,Equipe inscrita,p2148,1,0,0
+Outubro Movimente,LANÇAMENTO OUTUBRO MOVIMENTE 2021,SEFAZ,Executivo MT,2021,Homem,Presente,p3239,1,1,0
+Outubro Movimente,DESAFIO DE INOVAÇÃO 2021,PGE,Executivo MT,2021,Mulher,Equipe inscrita,p4593,1,0,0
+Outubro Movimente,LANÇAMENTO OUTUBRO MOVIMENTE 2021,AGER,Executivo MT,2021,Mulher,Presente,p5418,1,1,0
+Outubro Movimente,LANÇAMENTO OUTUBRO MOVIMENTE 2021,SINFRA,Executivo MT,2021,Mulher,Presente,p0089,1,1,0
+Outubro Movimente,DESAFIO DE INOVAÇÃO 2021,SINFRA,Executivo MT,2021,Mulher,Equipe inscrita,p0089,1,0,0
+Outubro Movimente,LANÇAMENTO OUTUBRO MOVIMENTE 2021,SEPLAG,Executivo MT,2021,Mulher,Presente,p0245,1,1,0
+Outubro Movimente,DESAFIO DE INOVAÇÃO 2021,SECITECI,Executivo MT,2021,Homem,Equipe inscrita,p5419,1,0,0
+Outubro Movimente,PRESENÇA SEM OFICINA IDENTIFICADA,SEDEC,Executivo MT,2021,Homem,Presente,p1445,1,1,0
+Outubro Movimente,DESAFIO DE INOVAÇÃO 2021,SEDEC,Executivo MT,2021,Homem,Equipe inscrita,p1445,1,0,0
+Outubro Movimente,LANÇAMENTO OUTUBRO MOVIMENTE 2021,SEPLAG,Executivo MT,2021,Homem,Presente,p2804,1,1,0
+Outubro Movimente,DESAFIO DE INOVAÇÃO 2021,SEPLAG,Executivo MT,2021,Homem,Equipe inscrita,p2804,1,0,0
+Outubro Movimente,LANÇAMENTO OUTUBRO MOVIMENTE 2021,SEPLAG,Executivo MT,2021,Mulher,Presente,p2737,1,1,0
+Outubro Movimente,DESAFIO DE INOVAÇÃO 2021,SEPLAG,Executivo MT,2021,Mulher,Equipe inscrita,p2737,1,0,0
+Outubro Movimente,LANÇAMENTO OUTUBRO MOVIMENTE 2021,SEPLAG,Executivo MT,2021,Mulher,Presente,p5195,1,1,0
+Outubro Movimente,DESAFIO DE INOVAÇÃO 2021,SEPLAG,Executivo MT,2021,Mulher,Equipe inscrita,p5195,1,0,0
+Outubro Movimente,LANÇAMENTO OUTUBRO MOVIMENTE 2021,SEFAZ,Executivo MT,2021,Mulher,Presente,p4582,1,1,0
+Outubro Movimente,DESAFIO DE INOVAÇÃO 2021,SEPLAG,Executivo MT,2021,Mulher,Equipe inscrita,p5420,1,0,0
+Outubro Movimente,DESAFIO DE INOVAÇÃO 2021,SEPLAG,Executivo MT,2021,Homem,Equipe inscrita,p1355,1,0,0
+Outubro Movimente,LANÇAMENTO OUTUBRO MOVIMENTE 2021,DETRAN,Executivo MT,2021,Homem,Presente,p5421,1,1,0
+Outubro Movimente,DESAFIO DE INOVAÇÃO 2021,DETRAN,Executivo MT,2021,Homem,Equipe inscrita,p5421,1,0,0
+Outubro Movimente,LANÇAMENTO OUTUBRO MOVIMENTE 2021,DETRAN,Executivo MT,2021,Homem,Presente,p5422,1,1,0
+Outubro Movimente,LANÇAMENTO OUTUBRO MOVIMENTE 2021,CGE,Executivo MT,2021,Mulher,Presente,p0178,1,1,0
+Outubro Movimente,DESAFIO DE INOVAÇÃO 2021,SES,Executivo MT,2021,Indefinido,Equipe inscrita,p2516,1,0,0
+Outubro Movimente,LANÇAMENTO OUTUBRO MOVIMENTE 2021,SEPLAG,Executivo MT,2021,Mulher,Presente,p0246,1,1,0
+Outubro Movimente,DESAFIO DE INOVAÇÃO 2021,SEPLAG,Executivo MT,2021,Mulher,Equipe inscrita,p0246,1,0,0
+Outubro Movimente,DESAFIO DE INOVAÇÃO 2021,SEPLAG,Executivo MT,2021,Mulher,Equipe inscrita,p0456,1,0,0
+Outubro Movimente,LANÇAMENTO OUTUBRO MOVIMENTE 2021,SETASC,Executivo MT,2021,Mulher,Presente,p5423,1,1,0
+Outubro Movimente,LANÇAMENTO OUTUBRO MOVIMENTE 2021,SEPLAG,Executivo MT,2021,Mulher,Presente,p0457,1,1,0
+Outubro Movimente,PRESENÇA SEM OFICINA IDENTIFICADA,SESP,Executivo MT,2021,Mulher,Presente,p5209,1,1,0
+Outubro Movimente,LANÇAMENTO OUTUBRO MOVIMENTE 2021,SEPLAG,Executivo MT,2021,Homem,Presente,p0493,1,1,0
+Outubro Movimente,DESAFIO DE INOVAÇÃO 2021,SEPLAG,Executivo MT,2021,Homem,Equipe inscrita,p0692,1,0,0
+Outubro Movimente,LANÇAMENTO OUTUBRO MOVIMENTE 2021,SETASC,Executivo MT,2021,Indefinido,Presente,p5424,1,1,0
+Outubro Movimente,PRESENÇA SEM OFICINA IDENTIFICADA,CASA CIVIL,Executivo MT,2021,Mulher,Presente,p0458,1,1,0
+Outubro Movimente,DESAFIO DE INOVAÇÃO 2021,SES,Executivo MT,2021,Mulher,Equipe inscrita,p5425,1,0,0
+Outubro Movimente,PRESENÇA SEM OFICINA IDENTIFICADA,SEPLAG,Executivo MT,2021,Mulher,Presente,p0206,1,1,0
+Outubro Movimente,DESAFIO DE INOVAÇÃO 2021,SEPLAG,Executivo MT,2021,Mulher,Equipe inscrita,p0206,1,0,0
+Outubro Movimente,DESAFIO DE INOVAÇÃO 2021,SESP,Executivo MT,2021,Mulher,Equipe inscrita,p0236,1,0,0
+Outubro Movimente,LANÇAMENTO OUTUBRO MOVIMENTE 2021,SEFAZ,Executivo MT,2021,Homem,Presente,p4592,1,1,0
+Outubro Movimente,LANÇAMENTO OUTUBRO MOVIMENTE 2021,SESP,Executivo MT,2021,Homem,Presente,p5426,1,1,0
+Outubro Movimente,LANÇAMENTO OUTUBRO MOVIMENTE 2021,SEFAZ,Executivo MT,2021,Mulher,Presente,p5427,1,1,0
+Outubro Movimente,LANÇAMENTO OUTUBRO MOVIMENTE 2021,SEPLAG,Executivo MT,2021,Homem,Presente,p5428,1,1,0
+Outubro Movimente,LANÇAMENTO OUTUBRO MOVIMENTE 2021,SEPLAG,Executivo MT,2021,Homem,Presente,p0450,1,1,0
+Outubro Movimente,DESAFIO DE INOVAÇÃO 2021,SEPLAG,Executivo MT,2021,Homem,Equipe inscrita,p0450,1,0,0
+Outubro Movimente,LANÇAMENTO OUTUBRO MOVIMENTE 2021,SEMA,Executivo MT,2021,Mulher,Presente,p5429,1,1,0
+Outubro Movimente,OFICINA 01 LINGUAGEM SIMPLES NA PRÁTICA,SERMAT,Executivo MT,2022,Mulher,Presente,p5430,1,1,0
+Outubro Movimente,OFICINA 01 LINGUAGEM SIMPLES NA PRÁTICA,NÃO IDENTIFICADO,Não identificado,2022,Mulher,Presente,p5431,1,1,0
+Outubro Movimente,MESA 04 SOCIEDADE DIGITAL,SINFRA,Executivo MT,2022,Homem,Presente,p1533,1,1,0
+Outubro Movimente,OFICINA 05 DESIGN THINKING EM GOVERNO,SES,Executivo MT,2022,Homem,Presente,p4985,1,1,0
+Outubro Movimente,ENCERRAMENTO DO DESAFIO DE INOVAÇÃO EM PRÁTICAS PÚBLICAS 2022,SEMA,Executivo MT,2022,Indefinido,Presente,p3357,1,1,0
+Outubro Movimente,LIVE ATIVIDADES FÍSICAS E PREVENÇÃO DE CÂNCER,SEPLAG,Executivo MT,2022,Mulher,Presente,p1498,1,1,0
+Outubro Movimente,MESA 01 POLÍTICAS PÚBLICAS UMA CONSTRUÇÃO ENTRE GOVERNO E CIDADÃO,SEPLAG,Executivo MT,2022,Mulher,Presente,p1498,1,1,0
+Outubro Movimente,OFICINA 01 LINGUAGEM SIMPLES NA PRÁTICA,SEPLAG,Executivo MT,2022,Mulher,Presente,p1498,1,1,0
+Outubro Movimente,OFICINA 02 COMO MELHORAR A EXPERIÊNCIA DO USUÁRIO EM SERVIÇOS PÚBLICOS,SEPLAG,Executivo MT,2022,Mulher,Presente,p1498,1,1,0
+Outubro Movimente,MESA 03 INTRAEMPREENDEDORISMO PÚBLICO CULTURA E COMPETÊNCIAS,SEPLAG,Executivo MT,2022,Mulher,Presente,p1498,1,1,0
+Outubro Movimente,MESA 04 SOCIEDADE DIGITAL,SEPLAG,Executivo MT,2022,Mulher,Presente,p1498,1,1,0
+Outubro Movimente,LIVE ATIVIDADES FÍSICAS E PREVENÇÃO DE CÂNCER,SEPLAG,Executivo MT,2022,Mulher,Presente,p0408,1,1,0
+Outubro Movimente,OFICINA 01 LINGUAGEM SIMPLES NA PRÁTICA,SEPLAG,Executivo MT,2022,Mulher,Presente,p0408,1,1,0
+Outubro Movimente,MESA 04 SOCIEDADE DIGITAL,SEPLAG,Executivo MT,2022,Mulher,Presente,p0408,1,1,0
+Outubro Movimente,OFICINA 05 DESIGN THINKING EM GOVERNO,SEFAZ,Executivo MT,2022,Mulher,Presente,p0129,1,1,0
+Outubro Movimente,OFICINA 01 LINGUAGEM SIMPLES NA PRÁTICA,SEPLAG,Executivo MT,2022,Mulher,Presente,p0244,1,1,0
+Outubro Movimente,LIVE ATIVIDADES FÍSICAS E PREVENÇÃO DE CÂNCER,NÃO IDENTIFICADO,Não identificado,2022,Homem,Presente,p5432,1,1,0
+Outubro Movimente,LIVE ATIVIDADES FÍSICAS E PREVENÇÃO DE CÂNCER,SEPLAG,Executivo MT,2022,Mulher,Presente,p5433,1,1,0
+Outubro Movimente,MESA 01 POLÍTICAS PÚBLICAS UMA CONSTRUÇÃO ENTRE GOVERNO E CIDADÃO,FUNAC,Executivo MT,2022,Mulher,Presente,p4602,1,1,0
+Outubro Movimente,ENCERRAMENTO DO DESAFIO DE INOVAÇÃO EM PRÁTICAS PÚBLICAS 2022,SEMA,Executivo MT,2022,Mulher,Presente,p5434,1,1,0
+Outubro Movimente,ENCERRAMENTO DO DESAFIO DE INOVAÇÃO EM PRÁTICAS PÚBLICAS 2022,SEFAZ,Executivo MT,2022,Mulher,Presente,p5435,1,1,0
+Outubro Movimente,MESA 05 DIREITO VISUAL MENOS JURIDIQUÊS E MAIS INCLUSÃO,SESP,Executivo MT,2022,Mulher,Presente,p4838,1,1,0
+Outubro Movimente,ENCERRAMENTO DO DESAFIO DE INOVAÇÃO EM PRÁTICAS PÚBLICAS 2022,SEMA,Executivo MT,2022,Mulher,Presente,p5436,1,1,0
+Outubro Movimente,OFICINA 02 COMO MELHORAR A EXPERIÊNCIA DO USUÁRIO EM SERVIÇOS PÚBLICOS,POLITEC,Executivo MT,2022,Mulher,Presente,p2996,1,1,0
+Outubro Movimente,OFICINA 01 LINGUAGEM SIMPLES NA PRÁTICA,NÃO IDENTIFICADO,Não identificado,2022,Mulher,Presente,p5437,1,1,0
+Outubro Movimente,OFICINA 02 COMO MELHORAR A EXPERIÊNCIA DO USUÁRIO EM SERVIÇOS PÚBLICOS,POLITEC,Executivo MT,2022,Mulher,Presente,p5438,1,1,0
+Outubro Movimente,ENCERRAMENTO DO DESAFIO DE INOVAÇÃO EM PRÁTICAS PÚBLICAS 2022,POLITEC,Executivo MT,2022,Mulher,Presente,p5438,1,1,0
+Outubro Movimente,LIVE ATIVIDADES FÍSICAS E PREVENÇÃO DE CÂNCER,SEPLAG,Executivo MT,2022,Mulher,Presente,p5439,1,1,0
+Outubro Movimente,MESA 01 POLÍTICAS PÚBLICAS UMA CONSTRUÇÃO ENTRE GOVERNO E CIDADÃO,SEPLAG,Executivo MT,2022,Mulher,Presente,p5439,1,1,0
+Outubro Movimente,MESA 03 INTRAEMPREENDEDORISMO PÚBLICO CULTURA E COMPETÊNCIAS,SEPLAG,Executivo MT,2022,Mulher,Presente,p5439,1,1,0
+Outubro Movimente,MESA 05 DIREITO VISUAL MENOS JURIDIQUÊS E MAIS INCLUSÃO,SEPLAG,Executivo MT,2022,Mulher,Presente,p5439,1,1,0
+Outubro Movimente,LIVE ATIVIDADES FÍSICAS E PREVENÇÃO DE CÂNCER,SEPLAG,Executivo MT,2022,Indefinido,Presente,p2497,1,1,0
+Outubro Movimente,MESA 01 POLÍTICAS PÚBLICAS UMA CONSTRUÇÃO ENTRE GOVERNO E CIDADÃO,SEPLAG,Executivo MT,2022,Mulher,Presente,p0418,1,1,0
+Outubro Movimente,ENCERRAMENTO DO DESAFIO DE INOVAÇÃO EM PRÁTICAS PÚBLICAS 2022,SEMA,Executivo MT,2022,Homem,Presente,p5440,1,1,0
+Outubro Movimente,OFICINA 03 CRIATIVIDADE E GAMIFICAÇÃO,NÃO IDENTIFICADO,Não identificado,2022,Mulher,Presente,p5441,1,1,1
+Outubro Movimente,OFICINA 01 LINGUAGEM SIMPLES NA PRÁTICA,SEPLAG,Executivo MT,2022,Mulher,Presente,p0099,1,1,0
+Outubro Movimente,MESA 05 DIREITO VISUAL MENOS JURIDIQUÊS E MAIS INCLUSÃO,SEPLAG,Executivo MT,2022,Mulher,Presente,p0099,1,1,0
+Outubro Movimente,OFICINA 05 DESIGN THINKING EM GOVERNO,SEPLAG,Executivo MT,2022,Mulher,Presente,p0099,1,1,0
+Outubro Movimente,MESA 01 POLÍTICAS PÚBLICAS UMA CONSTRUÇÃO ENTRE GOVERNO E CIDADÃO,SES,Executivo MT,2022,Mulher,Presente,p5442,1,1,0
+Outubro Movimente,LIVE ATIVIDADES FÍSICAS E PREVENÇÃO DE CÂNCER,SEPLAG,Executivo MT,2022,Homem,Presente,p1578,1,1,0
+Outubro Movimente,OFICINA 01 LINGUAGEM SIMPLES NA PRÁTICA,SEPLAG,Executivo MT,2022,Homem,Presente,p1578,1,1,0
+Outubro Movimente,OFICINA 02 COMO MELHORAR A EXPERIÊNCIA DO USUÁRIO EM SERVIÇOS PÚBLICOS,SEPLAG,Executivo MT,2022,Homem,Presente,p1578,1,1,0
+Outubro Movimente,MESA 03 INTRAEMPREENDEDORISMO PÚBLICO CULTURA E COMPETÊNCIAS,SEPLAG,Executivo MT,2022,Homem,Presente,p1578,1,1,0
+Outubro Movimente,MESA 04 SOCIEDADE DIGITAL,SEPLAG,Executivo MT,2022,Homem,Presente,p1578,1,1,0
+Outubro Movimente,MESA 05 DIREITO VISUAL MENOS JURIDIQUÊS E MAIS INCLUSÃO,SEPLAG,Executivo MT,2022,Homem,Presente,p1578,1,1,0
+Outubro Movimente,MESA 03 INTRAEMPREENDEDORISMO PÚBLICO CULTURA E COMPETÊNCIAS,SEPLAG,Executivo MT,2022,Homem,Presente,p1439,1,1,0
+Outubro Movimente,ENCERRAMENTO DO DESAFIO DE INOVAÇÃO EM PRÁTICAS PÚBLICAS 2022,SECEL,Executivo MT,2022,Mulher,Presente,p5246,1,1,0
+Outubro Movimente,LIVE ATIVIDADES FÍSICAS E PREVENÇÃO DE CÂNCER,SEPLAG,Executivo MT,2022,Mulher,Presente,p1422,1,1,0
+Outubro Movimente,MESA 01 POLÍTICAS PÚBLICAS UMA CONSTRUÇÃO ENTRE GOVERNO E CIDADÃO,SEPLAG,Executivo MT,2022,Mulher,Presente,p1422,1,1,0
+Outubro Movimente,OFICINA 01 LINGUAGEM SIMPLES NA PRÁTICA,SEPLAG,Executivo MT,2022,Mulher,Presente,p1422,1,1,0
+Outubro Movimente,OFICINA 02 COMO MELHORAR A EXPERIÊNCIA DO USUÁRIO EM SERVIÇOS PÚBLICOS,SEPLAG,Executivo MT,2022,Mulher,Presente,p1422,1,1,0
+Outubro Movimente,LIVE ATIVIDADES FÍSICAS E PREVENÇÃO DE CÂNCER,NÃO IDENTIFICADO,Não identificado,2022,Mulher,Presente,p5443,1,1,0
+Outubro Movimente,OFICINA 03 CRIATIVIDADE E GAMIFICAÇÃO,NÃO IDENTIFICADO,Não identificado,2022,Homem,Presente,p5444,1,1,1
+Outubro Movimente,MESA 04 SOCIEDADE DIGITAL,SEPLAG,Executivo MT,2022,Mulher,Presente,p1040,1,1,0
+Outubro Movimente,OFICINA 02 COMO MELHORAR A EXPERIÊNCIA DO USUÁRIO EM SERVIÇOS PÚBLICOS,NÃO IDENTIFICADO,Não identificado,2022,Mulher,Presente,p5445,1,1,0
+Outubro Movimente,MESA 05 DIREITO VISUAL MENOS JURIDIQUÊS E MAIS INCLUSÃO,NÃO IDENTIFICADO,Não identificado,2022,Mulher,Presente,p5445,1,1,0
+Outubro Movimente,ENCERRAMENTO DO DESAFIO DE INOVAÇÃO EM PRÁTICAS PÚBLICAS 2022,SEPLAG,Executivo MT,2022,Mulher,Presente,p3853,1,1,0
+Outubro Movimente,MESA 01 POLÍTICAS PÚBLICAS UMA CONSTRUÇÃO ENTRE GOVERNO E CIDADÃO,SEDUC,Executivo MT,2022,Mulher,Presente,p1170,1,1,0
+Outubro Movimente,MESA 03 INTRAEMPREENDEDORISMO PÚBLICO CULTURA E COMPETÊNCIAS,SEDUC,Executivo MT,2022,Mulher,Presente,p1170,1,1,0
+Outubro Movimente,MESA 04 SOCIEDADE DIGITAL,SEDUC,Executivo MT,2022,Mulher,Presente,p1170,1,1,0
+Outubro Movimente,MESA 05 DIREITO VISUAL MENOS JURIDIQUÊS E MAIS INCLUSÃO,SEDUC,Executivo MT,2022,Mulher,Presente,p1170,1,1,0
+Outubro Movimente,MESA 04 SOCIEDADE DIGITAL,MTI,Executivo MT,2022,Homem,Presente,p5446,1,1,0
+Outubro Movimente,LIVE ATIVIDADES FÍSICAS E PREVENÇÃO DE CÂNCER,MT SAÚDE,Executivo MT,2022,Indefinido,Presente,p5447,1,1,0
+Outubro Movimente,MESA 05 DIREITO VISUAL MENOS JURIDIQUÊS E MAIS INCLUSÃO,SEPLAG,Executivo MT,2022,Mulher,Presente,p0063,1,1,0
+Outubro Movimente,ENCERRAMENTO DO DESAFIO DE INOVAÇÃO EM PRÁTICAS PÚBLICAS 2022,SEPLAG,Executivo MT,2022,Mulher,Presente,p0810,1,1,0
+Outubro Movimente,MESA 01 POLÍTICAS PÚBLICAS UMA CONSTRUÇÃO ENTRE GOVERNO E CIDADÃO,SECITECI,Executivo MT,2022,Mulher,Presente,p5448,1,1,0
+Outubro Movimente,ENCERRAMENTO DO DESAFIO DE INOVAÇÃO EM PRÁTICAS PÚBLICAS 2022,PGE,Executivo MT,2022,Homem,Presente,p5449,1,1,0
+Outubro Movimente,ENCERRAMENTO DO DESAFIO DE INOVAÇÃO EM PRÁTICAS PÚBLICAS 2022,SEPLAG,Executivo MT,2022,Mulher,Presente,p5450,1,1,0
+Outubro Movimente,OFICINA 01 LINGUAGEM SIMPLES NA PRÁTICA,SEPLAG,Executivo MT,2022,Mulher,Presente,p5451,1,1,0
+Outubro Movimente,OFICINA 02 COMO MELHORAR A EXPERIÊNCIA DO USUÁRIO EM SERVIÇOS PÚBLICOS,SEPLAG,Executivo MT,2022,Mulher,Presente,p5451,1,1,0
+Outubro Movimente,MESA 05 DIREITO VISUAL MENOS JURIDIQUÊS E MAIS INCLUSÃO,SEPLAG,Executivo MT,2022,Mulher,Presente,p5451,1,1,0
+Outubro Movimente,OFICINA 03 CRIATIVIDADE E GAMIFICAÇÃO,SEFAZ,Executivo MT,2022,Homem,Ausente,p0093,1,0,1
+Outubro Movimente,OFICINA 05 DESIGN THINKING EM GOVERNO,SEFAZ,Executivo MT,2022,Mulher,Presente,p5038,1,1,0
+Outubro Movimente,ENCERRAMENTO DO DESAFIO DE INOVAÇÃO EM PRÁTICAS PÚBLICAS 2022,SEPLAG,Executivo MT,2022,Mulher,Presente,p0483,1,1,0
+Outubro Movimente,LIVE ATIVIDADES FÍSICAS E PREVENÇÃO DE CÂNCER,SEPLAG,Executivo MT,2022,Homem,Presente,p0443,1,1,0
+Outubro Movimente,MESA 01 POLÍTICAS PÚBLICAS UMA CONSTRUÇÃO ENTRE GOVERNO E CIDADÃO,SEPLAG,Executivo MT,2022,Homem,Presente,p0443,1,1,0
+Outubro Movimente,MESA 03 INTRAEMPREENDEDORISMO PÚBLICO CULTURA E COMPETÊNCIAS,SEPLAG,Executivo MT,2022,Homem,Presente,p0443,1,1,0
+Outubro Movimente,MESA 04 SOCIEDADE DIGITAL,SEPLAG,Executivo MT,2022,Homem,Presente,p0443,1,1,0
+Outubro Movimente,MESA 05 DIREITO VISUAL MENOS JURIDIQUÊS E MAIS INCLUSÃO,SEPLAG,Executivo MT,2022,Homem,Presente,p0443,1,1,0
+Outubro Movimente,OFICINA 05 DESIGN THINKING EM GOVERNO,TCE-MT,Outros poderes e órgãos,2022,Mulher,Presente,p4757,1,1,0
+Outubro Movimente,ENCERRAMENTO DO DESAFIO DE INOVAÇÃO EM PRÁTICAS PÚBLICAS 2022,SESP,Executivo MT,2022,Homem,Presente,p5259,1,1,0
+Outubro Movimente,OFICINA 01 LINGUAGEM SIMPLES NA PRÁTICA,EMPAER,Executivo MT,2022,Indefinido,Presente,p5452,1,1,0
+Outubro Movimente,LIVE ATIVIDADES FÍSICAS E PREVENÇÃO DE CÂNCER,NÃO IDENTIFICADO,Não identificado,2022,Indefinido,Presente,p5453,1,1,0
+Outubro Movimente,MESA 01 POLÍTICAS PÚBLICAS UMA CONSTRUÇÃO ENTRE GOVERNO E CIDADÃO,SETASC,Executivo MT,2022,Mulher,Presente,p5454,1,1,0
+Outubro Movimente,OFICINA 01 LINGUAGEM SIMPLES NA PRÁTICA,SETASC,Executivo MT,2022,Mulher,Presente,p5454,1,1,0
+Outubro Movimente,OFICINA 02 COMO MELHORAR A EXPERIÊNCIA DO USUÁRIO EM SERVIÇOS PÚBLICOS,SETASC,Executivo MT,2022,Mulher,Presente,p5454,1,1,0
+Outubro Movimente,MESA 03 INTRAEMPREENDEDORISMO PÚBLICO CULTURA E COMPETÊNCIAS,SETASC,Executivo MT,2022,Mulher,Presente,p5454,1,1,0
+Outubro Movimente,MESA 04 SOCIEDADE DIGITAL,SETASC,Executivo MT,2022,Mulher,Presente,p5454,1,1,0
+Outubro Movimente,ENCERRAMENTO DO DESAFIO DE INOVAÇÃO EM PRÁTICAS PÚBLICAS 2022,SECEL,Executivo MT,2022,Mulher,Presente,p5455,1,1,0
+Outubro Movimente,LIVE ATIVIDADES FÍSICAS E PREVENÇÃO DE CÂNCER,SEPLAG,Executivo MT,2022,Homem,Presente,p1095,1,1,0
+Outubro Movimente,ENCERRAMENTO DO DESAFIO DE INOVAÇÃO EM PRÁTICAS PÚBLICAS 2022,SEPLAG,Executivo MT,2022,Mulher,Presente,p4659,1,1,0
+Outubro Movimente,MESA 01 POLÍTICAS PÚBLICAS UMA CONSTRUÇÃO ENTRE GOVERNO E CIDADÃO,SEPLAG,Executivo MT,2022,Homem,Presente,p0421,1,1,0
+Outubro Movimente,OFICINA 01 LINGUAGEM SIMPLES NA PRÁTICA,SEPLAG,Executivo MT,2022,Homem,Presente,p0421,1,1,0
+Outubro Movimente,MESA 01 POLÍTICAS PÚBLICAS UMA CONSTRUÇÃO ENTRE GOVERNO E CIDADÃO,SEDEC,Executivo MT,2022,Mulher,Presente,p1583,1,1,0
+Outubro Movimente,OFICINA 01 LINGUAGEM SIMPLES NA PRÁTICA,SEDEC,Executivo MT,2022,Mulher,Presente,p1583,1,1,0
+Outubro Movimente,ENCERRAMENTO DO DESAFIO DE INOVAÇÃO EM PRÁTICAS PÚBLICAS 2022,SEPLAG,Executivo MT,2022,Homem,Presente,p0004,1,1,0
+Outubro Movimente,MESA 01 POLÍTICAS PÚBLICAS UMA CONSTRUÇÃO ENTRE GOVERNO E CIDADÃO,DETRAN,Executivo MT,2022,Mulher,Presente,p5456,1,1,0
+Outubro Movimente,ENCERRAMENTO DO DESAFIO DE INOVAÇÃO EM PRÁTICAS PÚBLICAS 2022,SECEL,Executivo MT,2022,Homem,Presente,p5269,1,1,0
+Outubro Movimente,MESA 01 POLÍTICAS PÚBLICAS UMA CONSTRUÇÃO ENTRE GOVERNO E CIDADÃO,SEFAZ,Executivo MT,2022,Homem,Presente,p3741,1,1,0
+Outubro Movimente,MESA 05 DIREITO VISUAL MENOS JURIDIQUÊS E MAIS INCLUSÃO,SEFAZ,Executivo MT,2022,Homem,Presente,p3741,1,1,0
+Outubro Movimente,OFICINA 05 DESIGN THINKING EM GOVERNO,SEFAZ,Executivo MT,2022,Mulher,Presente,p5457,1,1,0
+Outubro Movimente,LIVE ATIVIDADES FÍSICAS E PREVENÇÃO DE CÂNCER,SEPLAG,Executivo MT,2022,Mulher,Presente,p4909,1,1,0
+Outubro Movimente,OFICINA 01 LINGUAGEM SIMPLES NA PRÁTICA,SEPLAG,Executivo MT,2022,Mulher,Presente,p4909,1,1,0
+Outubro Movimente,MESA 04 SOCIEDADE DIGITAL,SEPLAG,Executivo MT,2022,Mulher,Presente,p4909,1,1,0
+Outubro Movimente,MESA 05 DIREITO VISUAL MENOS JURIDIQUÊS E MAIS INCLUSÃO,SEPLAG,Executivo MT,2022,Mulher,Presente,p4909,1,1,0
+Outubro Movimente,OFICINA 03 CRIATIVIDADE E GAMIFICAÇÃO,SEPLAG,Executivo MT,2022,Mulher,Ausente,p4909,1,0,1
+Outubro Movimente,MESA 01 POLÍTICAS PÚBLICAS UMA CONSTRUÇÃO ENTRE GOVERNO E CIDADÃO,NÃO IDENTIFICADO,Não identificado,2022,Mulher,Presente,p5458,1,1,0
+Outubro Movimente,MESA 04 SOCIEDADE DIGITAL,NÃO IDENTIFICADO,Não identificado,2022,Mulher,Presente,p5458,1,1,0
+Outubro Movimente,MESA 01 POLÍTICAS PÚBLICAS UMA CONSTRUÇÃO ENTRE GOVERNO E CIDADÃO,SEPLAG,Executivo MT,2022,Mulher,Presente,p1406,1,1,0
+Outubro Movimente,OFICINA 01 LINGUAGEM SIMPLES NA PRÁTICA,SEPLAG,Executivo MT,2022,Mulher,Presente,p1406,1,1,0
+Outubro Movimente,OFICINA 02 COMO MELHORAR A EXPERIÊNCIA DO USUÁRIO EM SERVIÇOS PÚBLICOS,SEPLAG,Executivo MT,2022,Mulher,Presente,p1406,1,1,0
+Outubro Movimente,MESA 03 INTRAEMPREENDEDORISMO PÚBLICO CULTURA E COMPETÊNCIAS,SEPLAG,Executivo MT,2022,Mulher,Presente,p1406,1,1,0
+Outubro Movimente,ENCERRAMENTO DO DESAFIO DE INOVAÇÃO EM PRÁTICAS PÚBLICAS 2022,SEFAZ,Executivo MT,2022,Mulher,Presente,p5459,1,1,0
+Outubro Movimente,LIVE ATIVIDADES FÍSICAS E PREVENÇÃO DE CÂNCER,SES,Executivo MT,2022,Homem,Presente,p5460,1,1,0
+Outubro Movimente,ENCERRAMENTO DO DESAFIO DE INOVAÇÃO EM PRÁTICAS PÚBLICAS 2022,SECEL,Executivo MT,2022,Mulher,Presente,p5461,1,1,0
+Outubro Movimente,OFICINA 01 LINGUAGEM SIMPLES NA PRÁTICA,SEPLAG,Executivo MT,2022,Mulher,Presente,p4552,1,1,0
+Outubro Movimente,OFICINA 02 COMO MELHORAR A EXPERIÊNCIA DO USUÁRIO EM SERVIÇOS PÚBLICOS,SEPLAG,Executivo MT,2022,Mulher,Presente,p4552,1,1,0
+Outubro Movimente,MESA 01 POLÍTICAS PÚBLICAS UMA CONSTRUÇÃO ENTRE GOVERNO E CIDADÃO,SEPLAG,Executivo MT,2022,Mulher,Presente,p1152,1,1,0
+Outubro Movimente,OFICINA 01 LINGUAGEM SIMPLES NA PRÁTICA,SEPLAG,Executivo MT,2022,Mulher,Presente,p1152,1,1,0
+Outubro Movimente,OFICINA 02 COMO MELHORAR A EXPERIÊNCIA DO USUÁRIO EM SERVIÇOS PÚBLICOS,SEPLAG,Executivo MT,2022,Mulher,Presente,p1152,1,1,0
+Outubro Movimente,MESA 03 INTRAEMPREENDEDORISMO PÚBLICO CULTURA E COMPETÊNCIAS,SEPLAG,Executivo MT,2022,Mulher,Presente,p1152,1,1,0
+Outubro Movimente,ENCERRAMENTO DO DESAFIO DE INOVAÇÃO EM PRÁTICAS PÚBLICAS 2022,SEPLAG,Executivo MT,2022,Homem,Presente,p1212,1,1,0
+Outubro Movimente,MESA 05 DIREITO VISUAL MENOS JURIDIQUÊS E MAIS INCLUSÃO,SESP,Executivo MT,2022,Indefinido,Presente,p5462,1,1,0
+Outubro Movimente,OFICINA 01 LINGUAGEM SIMPLES NA PRÁTICA,SEPLAG,Executivo MT,2022,Homem,Presente,p0242,1,1,0
+Outubro Movimente,MESA 05 DIREITO VISUAL MENOS JURIDIQUÊS E MAIS INCLUSÃO,SEPLAG,Executivo MT,2022,Homem,Presente,p0242,1,1,0
+Outubro Movimente,OFICINA 05 DESIGN THINKING EM GOVERNO,SEPLAG,Executivo MT,2022,Homem,Presente,p4606,1,1,0
+Outubro Movimente,MESA 01 POLÍTICAS PÚBLICAS UMA CONSTRUÇÃO ENTRE GOVERNO E CIDADÃO,SEDUC,Executivo MT,2022,Homem,Presente,p0107,1,1,0
+Outubro Movimente,OFICINA 01 LINGUAGEM SIMPLES NA PRÁTICA,SEDUC,Executivo MT,2022,Homem,Presente,p0107,1,1,0
+Outubro Movimente,OFICINA 02 COMO MELHORAR A EXPERIÊNCIA DO USUÁRIO EM SERVIÇOS PÚBLICOS,SEDUC,Executivo MT,2022,Homem,Presente,p0107,1,1,0
+Outubro Movimente,MESA 03 INTRAEMPREENDEDORISMO PÚBLICO CULTURA E COMPETÊNCIAS,SEDUC,Executivo MT,2022,Homem,Presente,p0107,1,1,0
+Outubro Movimente,MESA 04 SOCIEDADE DIGITAL,SEDUC,Executivo MT,2022,Homem,Presente,p0107,1,1,0
+Outubro Movimente,MESA 05 DIREITO VISUAL MENOS JURIDIQUÊS E MAIS INCLUSÃO,SEDUC,Executivo MT,2022,Homem,Presente,p0107,1,1,0
+Outubro Movimente,OFICINA 03 CRIATIVIDADE E GAMIFICAÇÃO,SEDUC,Executivo MT,2022,Homem,Presente,p0107,1,1,1
+Outubro Movimente,ENCERRAMENTO DO DESAFIO DE INOVAÇÃO EM PRÁTICAS PÚBLICAS 2022,SEDUC,Executivo MT,2022,Homem,Presente,p0107,1,1,0
+Outubro Movimente,MESA 03 INTRAEMPREENDEDORISMO PÚBLICO CULTURA E COMPETÊNCIAS,SES,Executivo MT,2022,Mulher,Presente,p4955,1,1,0
+Outubro Movimente,MESA 05 DIREITO VISUAL MENOS JURIDIQUÊS E MAIS INCLUSÃO,SES,Executivo MT,2022,Mulher,Presente,p4955,1,1,0
+Outubro Movimente,LIVE ATIVIDADES FÍSICAS E PREVENÇÃO DE CÂNCER,SEPLAG,Executivo MT,2022,Homem,Presente,p2199,1,1,0
+Outubro Movimente,ENCERRAMENTO DO DESAFIO DE INOVAÇÃO EM PRÁTICAS PÚBLICAS 2022,SEPLAG,Executivo MT,2022,Homem,Presente,p2199,1,1,0
+Outubro Movimente,MESA 05 DIREITO VISUAL MENOS JURIDIQUÊS E MAIS INCLUSÃO,SEPLAG,Executivo MT,2022,Mulher,Presente,p1699,1,1,0
+Outubro Movimente,OFICINA 03 CRIATIVIDADE E GAMIFICAÇÃO,NÃO IDENTIFICADO,Não identificado,2022,Homem,Presente,p5463,1,1,1
+Outubro Movimente,ENCERRAMENTO DO DESAFIO DE INOVAÇÃO EM PRÁTICAS PÚBLICAS 2022,SEFAZ,Executivo MT,2022,Mulher,Presente,p2725,1,1,0
+Outubro Movimente,LIVE ATIVIDADES FÍSICAS E PREVENÇÃO DE CÂNCER,SEPLAG,Executivo MT,2022,Mulher,Presente,p5394,1,1,0
+Outubro Movimente,ENCERRAMENTO DO DESAFIO DE INOVAÇÃO EM PRÁTICAS PÚBLICAS 2022,SEPLAG,Executivo MT,2022,Mulher,Presente,p0272,1,1,0
+Outubro Movimente,MESA 01 POLÍTICAS PÚBLICAS UMA CONSTRUÇÃO ENTRE GOVERNO E CIDADÃO,SEPLAG,Executivo MT,2022,Mulher,Presente,p5464,1,1,0
+Outubro Movimente,OFICINA 01 LINGUAGEM SIMPLES NA PRÁTICA,SEPLAG,Executivo MT,2022,Mulher,Presente,p5464,1,1,0
+Outubro Movimente,OFICINA 02 COMO MELHORAR A EXPERIÊNCIA DO USUÁRIO EM SERVIÇOS PÚBLICOS,SEPLAG,Executivo MT,2022,Mulher,Presente,p5464,1,1,0
+Outubro Movimente,OFICINA 03 CRIATIVIDADE E GAMIFICAÇÃO,SEPLAG,Executivo MT,2022,Mulher,Ausente,p5464,1,0,1
+Outubro Movimente,OFICINA 01 LINGUAGEM SIMPLES NA PRÁTICA,NÃO IDENTIFICADO,Não identificado,2022,Mulher,Presente,p5465,1,1,0
+Outubro Movimente,MESA 03 INTRAEMPREENDEDORISMO PÚBLICO CULTURA E COMPETÊNCIAS,INDEA,Executivo MT,2022,Mulher,Presente,p5466,1,1,0
+Outubro Movimente,MESA 05 DIREITO VISUAL MENOS JURIDIQUÊS E MAIS INCLUSÃO,INDEA,Executivo MT,2022,Mulher,Presente,p5466,1,1,0
+Outubro Movimente,MESA 04 SOCIEDADE DIGITAL,NÃO IDENTIFICADO,Não identificado,2022,Mulher,Presente,p5467,1,1,0
+Outubro Movimente,MESA 01 POLÍTICAS PÚBLICAS UMA CONSTRUÇÃO ENTRE GOVERNO E CIDADÃO,SETASC,Executivo MT,2022,Mulher,Presente,p0176,1,1,0
+Outubro Movimente,OFICINA 01 LINGUAGEM SIMPLES NA PRÁTICA,SETASC,Executivo MT,2022,Mulher,Presente,p0176,1,1,0
+Outubro Movimente,OFICINA 02 COMO MELHORAR A EXPERIÊNCIA DO USUÁRIO EM SERVIÇOS PÚBLICOS,SETASC,Executivo MT,2022,Mulher,Presente,p0176,1,1,0
+Outubro Movimente,MESA 03 INTRAEMPREENDEDORISMO PÚBLICO CULTURA E COMPETÊNCIAS,SETASC,Executivo MT,2022,Mulher,Presente,p0176,1,1,0
+Outubro Movimente,MESA 04 SOCIEDADE DIGITAL,SETASC,Executivo MT,2022,Mulher,Presente,p0176,1,1,0
+Outubro Movimente,MESA 01 POLÍTICAS PÚBLICAS UMA CONSTRUÇÃO ENTRE GOVERNO E CIDADÃO,POLITEC,Executivo MT,2022,Homem,Presente,p5468,1,1,0
+Outubro Movimente,OFICINA 01 LINGUAGEM SIMPLES NA PRÁTICA,POLITEC,Executivo MT,2022,Homem,Presente,p5468,1,1,0
+Outubro Movimente,OFICINA 02 COMO MELHORAR A EXPERIÊNCIA DO USUÁRIO EM SERVIÇOS PÚBLICOS,POLITEC,Executivo MT,2022,Homem,Presente,p5468,1,1,0
+Outubro Movimente,MESA 04 SOCIEDADE DIGITAL,POLITEC,Executivo MT,2022,Homem,Presente,p5468,1,1,0
+Outubro Movimente,ENCERRAMENTO DO DESAFIO DE INOVAÇÃO EM PRÁTICAS PÚBLICAS 2022,SECEL,Executivo MT,2022,Homem,Presente,p5469,1,1,0
+Outubro Movimente,LIVE ATIVIDADES FÍSICAS E PREVENÇÃO DE CÂNCER,CASA CIVIL,Executivo MT,2022,Mulher,Presente,p5093,1,1,0
+Outubro Movimente,ENCERRAMENTO DO DESAFIO DE INOVAÇÃO EM PRÁTICAS PÚBLICAS 2022,SEFAZ,Executivo MT,2022,Mulher,Presente,p5470,1,1,0
+Outubro Movimente,MESA 01 POLÍTICAS PÚBLICAS UMA CONSTRUÇÃO ENTRE GOVERNO E CIDADÃO,SESP,Executivo MT,2022,Mulher,Presente,p5471,1,1,0
+Outubro Movimente,MESA 01 POLÍTICAS PÚBLICAS UMA CONSTRUÇÃO ENTRE GOVERNO E CIDADÃO,MTI,Executivo MT,2022,Mulher,Presente,p1286,1,1,0
+Outubro Movimente,OFICINA 01 LINGUAGEM SIMPLES NA PRÁTICA,MTI,Executivo MT,2022,Mulher,Presente,p1286,1,1,0
+Outubro Movimente,OFICINA 02 COMO MELHORAR A EXPERIÊNCIA DO USUÁRIO EM SERVIÇOS PÚBLICOS,MTI,Executivo MT,2022,Mulher,Presente,p1286,1,1,0
+Outubro Movimente,MESA 03 INTRAEMPREENDEDORISMO PÚBLICO CULTURA E COMPETÊNCIAS,MTI,Executivo MT,2022,Mulher,Presente,p1286,1,1,0
+Outubro Movimente,MESA 04 SOCIEDADE DIGITAL,MTI,Executivo MT,2022,Mulher,Presente,p1286,1,1,0
+Outubro Movimente,MESA 05 DIREITO VISUAL MENOS JURIDIQUÊS E MAIS INCLUSÃO,MTI,Executivo MT,2022,Mulher,Presente,p1286,1,1,0
+Outubro Movimente,OFICINA 03 CRIATIVIDADE E GAMIFICAÇÃO,MTI,Executivo MT,2022,Mulher,Ausente,p1286,1,0,1
+Outubro Movimente,LIVE ATIVIDADES FÍSICAS E PREVENÇÃO DE CÂNCER,EMPAER,Executivo MT,2022,Mulher,Presente,p0531,1,1,0
+Outubro Movimente,OFICINA 01 LINGUAGEM SIMPLES NA PRÁTICA,EMPAER,Executivo MT,2022,Mulher,Presente,p0531,1,1,0
+Outubro Movimente,OFICINA 02 COMO MELHORAR A EXPERIÊNCIA DO USUÁRIO EM SERVIÇOS PÚBLICOS,EMPAER,Executivo MT,2022,Mulher,Presente,p0531,1,1,0
+Outubro Movimente,OFICINA 03 CRIATIVIDADE E GAMIFICAÇÃO,EMPAER,Executivo MT,2022,Mulher,Presente,p0531,1,1,1
+Outubro Movimente,OFICINA 05 DESIGN THINKING EM GOVERNO,EMPAER,Executivo MT,2022,Mulher,Presente,p0531,1,1,0
+Outubro Movimente,MESA 03 INTRAEMPREENDEDORISMO PÚBLICO CULTURA E COMPETÊNCIAS,NÃO IDENTIFICADO,Não identificado,2022,Homem,Presente,p5472,1,1,0
+Outubro Movimente,MESA 04 SOCIEDADE DIGITAL,MTI,Executivo MT,2022,Indefinido,Presente,p4023,1,1,0
+Outubro Movimente,OFICINA 01 LINGUAGEM SIMPLES NA PRÁTICA,SEPLAG,Executivo MT,2022,Mulher,Presente,p5473,1,1,0
+Outubro Movimente,MESA 05 DIREITO VISUAL MENOS JURIDIQUÊS E MAIS INCLUSÃO,NÃO IDENTIFICADO,Não identificado,2022,Mulher,Presente,p1828,1,1,0
+Outubro Movimente,LIVE ATIVIDADES FÍSICAS E PREVENÇÃO DE CÂNCER,SEPLAG,Executivo MT,2022,Mulher,Presente,p5474,1,1,0
+Outubro Movimente,MESA 03 INTRAEMPREENDEDORISMO PÚBLICO CULTURA E COMPETÊNCIAS,SEFAZ,Executivo MT,2022,Mulher,Presente,p2124,1,1,0
+Outubro Movimente,MESA 01 POLÍTICAS PÚBLICAS UMA CONSTRUÇÃO ENTRE GOVERNO E CIDADÃO,CASA CIVIL,Executivo MT,2022,Mulher,Presente,p1867,1,1,0
+Outubro Movimente,OFICINA 01 LINGUAGEM SIMPLES NA PRÁTICA,SES,Executivo MT,2022,Mulher,Presente,p1013,1,1,0
+Outubro Movimente,OFICINA 03 CRIATIVIDADE E GAMIFICAÇÃO,SES,Executivo MT,2022,Mulher,Ausente,p1013,1,0,1
+Outubro Movimente,LIVE ATIVIDADES FÍSICAS E PREVENÇÃO DE CÂNCER,SEPLAG,Executivo MT,2022,Mulher,Presente,p5475,1,1,0
+Outubro Movimente,ENCERRAMENTO DO DESAFIO DE INOVAÇÃO EM PRÁTICAS PÚBLICAS 2022,SEPLAG,Executivo MT,2022,Mulher,Presente,p5301,1,1,0
+Outubro Movimente,LIVE ATIVIDADES FÍSICAS E PREVENÇÃO DE CÂNCER,SEPLAG,Executivo MT,2022,Homem,Presente,p5476,1,1,0
+Outubro Movimente,LIVE ATIVIDADES FÍSICAS E PREVENÇÃO DE CÂNCER,SEPLAG,Executivo MT,2022,Indefinido,Presente,p4691,1,1,0
+Outubro Movimente,OFICINA 03 CRIATIVIDADE E GAMIFICAÇÃO,SEPLAG,Executivo MT,2022,Indefinido,Ausente,p4691,1,0,1
+Outubro Movimente,MESA 03 INTRAEMPREENDEDORISMO PÚBLICO CULTURA E COMPETÊNCIAS,NÃO IDENTIFICADO,Não identificado,2022,Mulher,Presente,p5477,1,1,0
+Outubro Movimente,MESA 04 SOCIEDADE DIGITAL,SESP,Executivo MT,2022,Homem,Presente,p5478,1,1,0
+Outubro Movimente,ENCERRAMENTO DO DESAFIO DE INOVAÇÃO EM PRÁTICAS PÚBLICAS 2022,SESP,Executivo MT,2022,Mulher,Presente,p4650,1,1,0
+Outubro Movimente,LIVE ATIVIDADES FÍSICAS E PREVENÇÃO DE CÂNCER,SEPLAG,Executivo MT,2022,Mulher,Presente,p0423,1,1,0
+Outubro Movimente,MESA 01 POLÍTICAS PÚBLICAS UMA CONSTRUÇÃO ENTRE GOVERNO E CIDADÃO,SEPLAG,Executivo MT,2022,Mulher,Presente,p0423,1,1,0
+Outubro Movimente,OFICINA 01 LINGUAGEM SIMPLES NA PRÁTICA,SEPLAG,Executivo MT,2022,Mulher,Presente,p0423,1,1,0
+Outubro Movimente,OFICINA 02 COMO MELHORAR A EXPERIÊNCIA DO USUÁRIO EM SERVIÇOS PÚBLICOS,SEPLAG,Executivo MT,2022,Mulher,Presente,p0423,1,1,0
+Outubro Movimente,MESA 03 INTRAEMPREENDEDORISMO PÚBLICO CULTURA E COMPETÊNCIAS,SEPLAG,Executivo MT,2022,Mulher,Presente,p0423,1,1,0
+Outubro Movimente,MESA 01 POLÍTICAS PÚBLICAS UMA CONSTRUÇÃO ENTRE GOVERNO E CIDADÃO,SEPLAG,Executivo MT,2022,Homem,Presente,p1054,1,1,0
+Outubro Movimente,OFICINA 01 LINGUAGEM SIMPLES NA PRÁTICA,SEPLAG,Executivo MT,2022,Homem,Presente,p1054,1,1,0
+Outubro Movimente,OFICINA 02 COMO MELHORAR A EXPERIÊNCIA DO USUÁRIO EM SERVIÇOS PÚBLICOS,SEPLAG,Executivo MT,2022,Homem,Presente,p1054,1,1,0
+Outubro Movimente,MESA 04 SOCIEDADE DIGITAL,SEPLAG,Executivo MT,2022,Homem,Presente,p1054,1,1,0
+Outubro Movimente,MESA 05 DIREITO VISUAL MENOS JURIDIQUÊS E MAIS INCLUSÃO,PGE,Executivo MT,2022,Homem,Presente,p5479,1,1,0
+Outubro Movimente,ENCERRAMENTO DO DESAFIO DE INOVAÇÃO EM PRÁTICAS PÚBLICAS 2022,POLITEC,Executivo MT,2022,Mulher,Presente,p0728,1,1,0
+Outubro Movimente,ENCERRAMENTO DO DESAFIO DE INOVAÇÃO EM PRÁTICAS PÚBLICAS 2022,SESP,Executivo MT,2022,Mulher,Presente,p5480,1,1,0
+Outubro Movimente,OFICINA 01 LINGUAGEM SIMPLES NA PRÁTICA,SERMAT,Executivo MT,2022,Mulher,Presente,p5481,1,1,0
+Outubro Movimente,ENCERRAMENTO DO DESAFIO DE INOVAÇÃO EM PRÁTICAS PÚBLICAS 2022,SEMA,Executivo MT,2022,Mulher,Presente,p5482,1,1,0
+Outubro Movimente,MESA 04 SOCIEDADE DIGITAL,MTI,Executivo MT,2022,Homem,Presente,p2679,1,1,0
+Outubro Movimente,LIVE ATIVIDADES FÍSICAS E PREVENÇÃO DE CÂNCER,SEPLAG,Executivo MT,2022,Homem,Presente,p0553,1,1,0
+Outubro Movimente,ENCERRAMENTO DO DESAFIO DE INOVAÇÃO EM PRÁTICAS PÚBLICAS 2022,SEPLAG,Executivo MT,2022,Homem,Presente,p5483,1,1,0
+Outubro Movimente,LIVE ATIVIDADES FÍSICAS E PREVENÇÃO DE CÂNCER,SEPLAG,Executivo MT,2022,Mulher,Presente,p5484,1,1,0
+Outubro Movimente,LIVE ATIVIDADES FÍSICAS E PREVENÇÃO DE CÂNCER,SEPLAG,Executivo MT,2022,Homem,Presente,p0096,1,1,0
+Outubro Movimente,OFICINA 05 DESIGN THINKING EM GOVERNO,TCE-MT,Outros poderes e órgãos,2022,Homem,Presente,p5485,1,1,0
+Outubro Movimente,MESA 05 DIREITO VISUAL MENOS JURIDIQUÊS E MAIS INCLUSÃO,DETRAN,Executivo MT,2022,Mulher,Presente,p0130,1,1,0
+Outubro Movimente,MESA 05 DIREITO VISUAL MENOS JURIDIQUÊS E MAIS INCLUSÃO,NÃO IDENTIFICADO,Não identificado,2022,Mulher,Presente,p5486,1,1,0
+Outubro Movimente,OFICINA 01 LINGUAGEM SIMPLES NA PRÁTICA,SEPLAG,Executivo MT,2022,Mulher,Presente,p5487,1,1,0
+Outubro Movimente,OFICINA 02 COMO MELHORAR A EXPERIÊNCIA DO USUÁRIO EM SERVIÇOS PÚBLICOS,MTI,Executivo MT,2022,Mulher,Presente,p2739,1,1,0
+Outubro Movimente,OFICINA 02 COMO MELHORAR A EXPERIÊNCIA DO USUÁRIO EM SERVIÇOS PÚBLICOS,NÃO IDENTIFICADO,Não identificado,2022,Mulher,Presente,p5488,1,1,0
+Outubro Movimente,OFICINA 05 DESIGN THINKING EM GOVERNO,SEFAZ,Executivo MT,2022,Mulher,Presente,p5150,1,1,0
+Outubro Movimente,MESA 01 POLÍTICAS PÚBLICAS UMA CONSTRUÇÃO ENTRE GOVERNO E CIDADÃO,SEPLAG,Executivo MT,2022,Mulher,Presente,p0548,1,1,0
+Outubro Movimente,OFICINA 01 LINGUAGEM SIMPLES NA PRÁTICA,SEPLAG,Executivo MT,2022,Mulher,Presente,p0548,1,1,0
+Outubro Movimente,LIVE ATIVIDADES FÍSICAS E PREVENÇÃO DE CÂNCER,SEPLAG,Executivo MT,2022,Mulher,Presente,p0554,1,1,0
+Outubro Movimente,MESA 01 POLÍTICAS PÚBLICAS UMA CONSTRUÇÃO ENTRE GOVERNO E CIDADÃO,SEPLAG,Executivo MT,2022,Mulher,Presente,p0554,1,1,0
+Outubro Movimente,MESA 05 DIREITO VISUAL MENOS JURIDIQUÊS E MAIS INCLUSÃO,NÃO IDENTIFICADO,Não identificado,2022,Mulher,Presente,p5489,1,1,0
+Outubro Movimente,OFICINA 05 DESIGN THINKING EM GOVERNO,SEFAZ,Executivo MT,2022,Mulher,Presente,p0789,1,1,0
+Outubro Movimente,ENCERRAMENTO DO DESAFIO DE INOVAÇÃO EM PRÁTICAS PÚBLICAS 2022,POLITEC,Executivo MT,2022,Homem,Presente,p5490,1,1,0
+Outubro Movimente,MESA 01 POLÍTICAS PÚBLICAS UMA CONSTRUÇÃO ENTRE GOVERNO E CIDADÃO,SEFAZ,Executivo MT,2022,Homem,Presente,p5491,1,1,0
+Outubro Movimente,ENCERRAMENTO DO DESAFIO DE INOVAÇÃO EM PRÁTICAS PÚBLICAS 2022,SECEL,Executivo MT,2022,Mulher,Presente,p2747,1,1,0
+Outubro Movimente,ENCERRAMENTO DO DESAFIO DE INOVAÇÃO EM PRÁTICAS PÚBLICAS 2022,SES,Executivo MT,2022,Mulher,Presente,p5492,1,1,0
+Outubro Movimente,MESA 01 POLÍTICAS PÚBLICAS UMA CONSTRUÇÃO ENTRE GOVERNO E CIDADÃO,SEPLAG,Executivo MT,2022,Mulher,Presente,p5493,1,1,0
+Outubro Movimente,ENCERRAMENTO DO DESAFIO DE INOVAÇÃO EM PRÁTICAS PÚBLICAS 2022,SESP,Executivo MT,2022,Mulher,Presente,p0223,1,1,0
+Outubro Movimente,MESA 01 POLÍTICAS PÚBLICAS UMA CONSTRUÇÃO ENTRE GOVERNO E CIDADÃO,SESP,Executivo MT,2022,Mulher,Presente,p5494,1,1,0
+Outubro Movimente,MESA 04 SOCIEDADE DIGITAL,SESP,Executivo MT,2022,Mulher,Presente,p5494,1,1,0
+Outubro Movimente,ENCERRAMENTO DO DESAFIO DE INOVAÇÃO EM PRÁTICAS PÚBLICAS 2022,SEPLAG,Executivo MT,2022,Homem,Presente,p5495,1,1,0
+Outubro Movimente,MESA 05 DIREITO VISUAL MENOS JURIDIQUÊS E MAIS INCLUSÃO,SEPLAG,Executivo MT,2022,Mulher,Presente,p0335,1,1,0
+Outubro Movimente,LIVE ATIVIDADES FÍSICAS E PREVENÇÃO DE CÂNCER,SEPLAG,Executivo MT,2022,Mulher,Presente,p5496,1,1,0
+Outubro Movimente,OFICINA 02 COMO MELHORAR A EXPERIÊNCIA DO USUÁRIO EM SERVIÇOS PÚBLICOS,SEPLAG,Executivo MT,2022,Mulher,Presente,p5496,1,1,0
+Outubro Movimente,OFICINA 03 CRIATIVIDADE E GAMIFICAÇÃO,NÃO IDENTIFICADO,Não identificado,2022,Homem,Presente,p5497,1,1,1
+Outubro Movimente,ENCERRAMENTO DO DESAFIO DE INOVAÇÃO EM PRÁTICAS PÚBLICAS 2022,SECEL,Executivo MT,2022,Homem,Presente,p1145,1,1,0
+Outubro Movimente,MESA 01 POLÍTICAS PÚBLICAS UMA CONSTRUÇÃO ENTRE GOVERNO E CIDADÃO,PGE,Executivo MT,2022,Homem,Presente,p5417,1,1,0
+Outubro Movimente,OFICINA 01 LINGUAGEM SIMPLES NA PRÁTICA,PGE,Executivo MT,2022,Homem,Presente,p5417,1,1,0
+Outubro Movimente,OFICINA 02 COMO MELHORAR A EXPERIÊNCIA DO USUÁRIO EM SERVIÇOS PÚBLICOS,PGE,Executivo MT,2022,Homem,Presente,p5417,1,1,0
+Outubro Movimente,MESA 05 DIREITO VISUAL MENOS JURIDIQUÊS E MAIS INCLUSÃO,SINFRA,Executivo MT,2022,Mulher,Presente,p3927,1,1,0
+Outubro Movimente,ENCERRAMENTO DO DESAFIO DE INOVAÇÃO EM PRÁTICAS PÚBLICAS 2022,SECEL,Executivo MT,2022,Mulher,Presente,p5498,1,1,0
+Outubro Movimente,ENCERRAMENTO DO DESAFIO DE INOVAÇÃO EM PRÁTICAS PÚBLICAS 2022,SEMA,Executivo MT,2022,Mulher,Presente,p5499,1,1,0
+Outubro Movimente,LIVE ATIVIDADES FÍSICAS E PREVENÇÃO DE CÂNCER,SINFRA,Executivo MT,2022,Mulher,Presente,p0089,1,1,0
+Outubro Movimente,MESA 01 POLÍTICAS PÚBLICAS UMA CONSTRUÇÃO ENTRE GOVERNO E CIDADÃO,SINFRA,Executivo MT,2022,Mulher,Presente,p0089,1,1,0
+Outubro Movimente,OFICINA 02 COMO MELHORAR A EXPERIÊNCIA DO USUÁRIO EM SERVIÇOS PÚBLICOS,SINFRA,Executivo MT,2022,Mulher,Presente,p0089,1,1,0
+Outubro Movimente,MESA 03 INTRAEMPREENDEDORISMO PÚBLICO CULTURA E COMPETÊNCIAS,SINFRA,Executivo MT,2022,Mulher,Presente,p0089,1,1,0
+Outubro Movimente,MESA 04 SOCIEDADE DIGITAL,SINFRA,Executivo MT,2022,Mulher,Presente,p0089,1,1,0
+Outubro Movimente,OFICINA 03 CRIATIVIDADE E GAMIFICAÇÃO,SINFRA,Executivo MT,2022,Mulher,Ausente,p0089,1,0,1
+Outubro Movimente,MESA 05 DIREITO VISUAL MENOS JURIDIQUÊS E MAIS INCLUSÃO,NÃO IDENTIFICADO,Não identificado,2022,Mulher,Presente,p5500,1,1,0
+Outubro Movimente,OFICINA 02 COMO MELHORAR A EXPERIÊNCIA DO USUÁRIO EM SERVIÇOS PÚBLICOS,SEPLAG,Executivo MT,2022,Mulher,Presente,p0245,1,1,0
+Outubro Movimente,MESA 05 DIREITO VISUAL MENOS JURIDIQUÊS E MAIS INCLUSÃO,SEPLAG,Executivo MT,2022,Mulher,Presente,p0245,1,1,0
+Outubro Movimente,LIVE ATIVIDADES FÍSICAS E PREVENÇÃO DE CÂNCER,SEPLAG,Executivo MT,2022,Mulher,Presente,p5501,1,1,0
+Outubro Movimente,LIVE ATIVIDADES FÍSICAS E PREVENÇÃO DE CÂNCER,SEPLAG,Executivo MT,2022,Homem,Presente,p5502,1,1,0
+Outubro Movimente,OFICINA 03 CRIATIVIDADE E GAMIFICAÇÃO,SEPLAG,Executivo MT,2022,Homem,Ausente,p5502,1,0,1
+Outubro Movimente,MESA 01 POLÍTICAS PÚBLICAS UMA CONSTRUÇÃO ENTRE GOVERNO E CIDADÃO,NÃO IDENTIFICADO,Não identificado,2022,Mulher,Presente,p5503,1,1,0
+Outubro Movimente,MESA 04 SOCIEDADE DIGITAL,NÃO IDENTIFICADO,Não identificado,2022,Homem,Presente,p5504,1,1,0
+Outubro Movimente,OFICINA 03 CRIATIVIDADE E GAMIFICAÇÃO,IOMAT,Executivo MT,2022,Homem,Ausente,p1407,1,0,1
+Outubro Movimente,MESA 04 SOCIEDADE DIGITAL,SEPLAG,Executivo MT,2022,Homem,Presente,p2804,1,1,0
+Outubro Movimente,MESA 01 POLÍTICAS PÚBLICAS UMA CONSTRUÇÃO ENTRE GOVERNO E CIDADÃO,SEPLAG,Executivo MT,2022,Mulher,Presente,p1978,1,1,0
+Outubro Movimente,ENCERRAMENTO DO DESAFIO DE INOVAÇÃO EM PRÁTICAS PÚBLICAS 2022,SEFAZ,Executivo MT,2022,Mulher,Presente,p5505,1,1,0
+Outubro Movimente,MESA 01 POLÍTICAS PÚBLICAS UMA CONSTRUÇÃO ENTRE GOVERNO E CIDADÃO,SEPLAG,Executivo MT,2022,Homem,Presente,p0095,1,1,0
+Outubro Movimente,MESA 03 INTRAEMPREENDEDORISMO PÚBLICO CULTURA E COMPETÊNCIAS,SEPLAG,Executivo MT,2022,Homem,Presente,p0095,1,1,0
+Outubro Movimente,MESA 05 DIREITO VISUAL MENOS JURIDIQUÊS E MAIS INCLUSÃO,SEPLAG,Executivo MT,2022,Mulher,Presente,p4759,1,1,0
+Outubro Movimente,LIVE ATIVIDADES FÍSICAS E PREVENÇÃO DE CÂNCER,SEPLAG,Executivo MT,2022,Mulher,Presente,p5195,1,1,0
+Outubro Movimente,MESA 01 POLÍTICAS PÚBLICAS UMA CONSTRUÇÃO ENTRE GOVERNO E CIDADÃO,SEPLAG,Executivo MT,2022,Mulher,Presente,p5195,1,1,0
+Outubro Movimente,OFICINA 01 LINGUAGEM SIMPLES NA PRÁTICA,SEPLAG,Executivo MT,2022,Mulher,Presente,p5195,1,1,0
+Outubro Movimente,OFICINA 02 COMO MELHORAR A EXPERIÊNCIA DO USUÁRIO EM SERVIÇOS PÚBLICOS,SEPLAG,Executivo MT,2022,Mulher,Presente,p5195,1,1,0
+Outubro Movimente,MESA 03 INTRAEMPREENDEDORISMO PÚBLICO CULTURA E COMPETÊNCIAS,SEPLAG,Executivo MT,2022,Mulher,Presente,p5195,1,1,0
+Outubro Movimente,MESA 04 SOCIEDADE DIGITAL,SEPLAG,Executivo MT,2022,Mulher,Presente,p5195,1,1,0
+Outubro Movimente,MESA 05 DIREITO VISUAL MENOS JURIDIQUÊS E MAIS INCLUSÃO,SEPLAG,Executivo MT,2022,Mulher,Presente,p5195,1,1,0
+Outubro Movimente,OFICINA 02 COMO MELHORAR A EXPERIÊNCIA DO USUÁRIO EM SERVIÇOS PÚBLICOS,NÃO IDENTIFICADO,Não identificado,2022,Homem,Presente,p5506,1,1,0
+Outubro Movimente,ENCERRAMENTO DO DESAFIO DE INOVAÇÃO EM PRÁTICAS PÚBLICAS 2022,SEFAZ,Executivo MT,2022,Homem,Presente,p3380,1,1,0
+Outubro Movimente,MESA 04 SOCIEDADE DIGITAL,SEPLAG,Executivo MT,2022,Homem,Presente,p5507,1,1,0
+Outubro Movimente,LIVE ATIVIDADES FÍSICAS E PREVENÇÃO DE CÂNCER,SEPLAG,Executivo MT,2022,Mulher,Presente,p5508,1,1,0
+Outubro Movimente,MESA 01 POLÍTICAS PÚBLICAS UMA CONSTRUÇÃO ENTRE GOVERNO E CIDADÃO,SEPLAG,Executivo MT,2022,Mulher,Presente,p0503,1,1,0
+Outubro Movimente,OFICINA 02 COMO MELHORAR A EXPERIÊNCIA DO USUÁRIO EM SERVIÇOS PÚBLICOS,SEPLAG,Executivo MT,2022,Mulher,Presente,p0503,1,1,0
+Outubro Movimente,OFICINA 03 CRIATIVIDADE E GAMIFICAÇÃO,SES,Executivo MT,2022,Mulher,Ausente,p4932,1,0,1
+Outubro Movimente,MESA 03 INTRAEMPREENDEDORISMO PÚBLICO CULTURA E COMPETÊNCIAS,SINFRA,Executivo MT,2022,Mulher,Presente,p5509,1,1,0
+Outubro Movimente,OFICINA 03 CRIATIVIDADE E GAMIFICAÇÃO,SECITECI,Executivo MT,2022,Mulher,Ausente,p0737,1,0,1
+Outubro Movimente,LIVE ATIVIDADES FÍSICAS E PREVENÇÃO DE CÂNCER,SEPLAG,Executivo MT,2022,Mulher,Presente,p0246,1,1,0
+Outubro Movimente,OFICINA 01 LINGUAGEM SIMPLES NA PRÁTICA,SEPLAG,Executivo MT,2022,Mulher,Presente,p0246,1,1,0
+Outubro Movimente,OFICINA 02 COMO MELHORAR A EXPERIÊNCIA DO USUÁRIO EM SERVIÇOS PÚBLICOS,SEPLAG,Executivo MT,2022,Mulher,Presente,p0246,1,1,0
+Outubro Movimente,MESA 03 INTRAEMPREENDEDORISMO PÚBLICO CULTURA E COMPETÊNCIAS,SEPLAG,Executivo MT,2022,Mulher,Presente,p0246,1,1,0
+Outubro Movimente,MESA 04 SOCIEDADE DIGITAL,SEPLAG,Executivo MT,2022,Mulher,Presente,p0246,1,1,0
+Outubro Movimente,MESA 05 DIREITO VISUAL MENOS JURIDIQUÊS E MAIS INCLUSÃO,SEPLAG,Executivo MT,2022,Mulher,Presente,p0246,1,1,0
+Outubro Movimente,ENCERRAMENTO DO DESAFIO DE INOVAÇÃO EM PRÁTICAS PÚBLICAS 2022,SEPLAG,Executivo MT,2022,Mulher,Presente,p0246,1,1,0
+Outubro Movimente,OFICINA 01 LINGUAGEM SIMPLES NA PRÁTICA,SEPLAG,Executivo MT,2022,Mulher,Presente,p0764,1,1,0
+Outubro Movimente,LIVE ATIVIDADES FÍSICAS E PREVENÇÃO DE CÂNCER,SEPLAG,Executivo MT,2022,Mulher,Presente,p5510,1,1,0
+Outubro Movimente,OFICINA 02 COMO MELHORAR A EXPERIÊNCIA DO USUÁRIO EM SERVIÇOS PÚBLICOS,SEDEC,Executivo MT,2022,Mulher,Presente,p5511,1,1,0
+Outubro Movimente,LIVE ATIVIDADES FÍSICAS E PREVENÇÃO DE CÂNCER,SEPLAG,Executivo MT,2022,Homem,Presente,p1822,1,1,0
+Outubro Movimente,OFICINA 02 COMO MELHORAR A EXPERIÊNCIA DO USUÁRIO EM SERVIÇOS PÚBLICOS,SEPLAG,Executivo MT,2022,Homem,Presente,p1822,1,1,0
+Outubro Movimente,MESA 04 SOCIEDADE DIGITAL,SEPLAG,Executivo MT,2022,Homem,Presente,p1822,1,1,0
+Outubro Movimente,OFICINA 03 CRIATIVIDADE E GAMIFICAÇÃO,SEPLAG,Executivo MT,2022,Homem,Presente,p1822,1,1,1
+Outubro Movimente,MESA 01 POLÍTICAS PÚBLICAS UMA CONSTRUÇÃO ENTRE GOVERNO E CIDADÃO,NÃO IDENTIFICADO,Não identificado,2022,Homem,Presente,p5512,1,1,0
+Outubro Movimente,LIVE ATIVIDADES FÍSICAS E PREVENÇÃO DE CÂNCER,NÃO IDENTIFICADO,Não identificado,2022,Homem,Presente,p5513,1,1,0
+Outubro Movimente,MESA 01 POLÍTICAS PÚBLICAS UMA CONSTRUÇÃO ENTRE GOVERNO E CIDADÃO,NÃO IDENTIFICADO,Não identificado,2022,Homem,Presente,p5513,1,1,0
+Outubro Movimente,OFICINA 02 COMO MELHORAR A EXPERIÊNCIA DO USUÁRIO EM SERVIÇOS PÚBLICOS,NÃO IDENTIFICADO,Não identificado,2022,Homem,Presente,p5513,1,1,0
+Outubro Movimente,MESA 05 DIREITO VISUAL MENOS JURIDIQUÊS E MAIS INCLUSÃO,NÃO IDENTIFICADO,Não identificado,2022,Homem,Presente,p5513,1,1,0
+Outubro Movimente,MESA 04 SOCIEDADE DIGITAL,SEPLAG,Executivo MT,2022,Homem,Presente,p4740,1,1,0
+Outubro Movimente,MESA 04 SOCIEDADE DIGITAL,MTI,Executivo MT,2022,Indefinido,Presente,p2953,1,1,0
+Outubro Movimente,OFICINA 03 CRIATIVIDADE E GAMIFICAÇÃO,NÃO IDENTIFICADO,Não identificado,2022,Homem,Ausente,p5514,1,0,1
+Outubro Movimente,MESA 05 DIREITO VISUAL MENOS JURIDIQUÊS E MAIS INCLUSÃO,SEPLAG,Executivo MT,2022,Homem,Presente,p0493,1,1,0
+Outubro Movimente,MESA 04 SOCIEDADE DIGITAL,SEFAZ,Executivo MT,2022,Homem,Presente,p4600,1,1,0
+Outubro Movimente,ENCERRAMENTO DO DESAFIO DE INOVAÇÃO EM PRÁTICAS PÚBLICAS 2022,SEPLAG,Executivo MT,2022,Mulher,Presente,p1206,1,1,0
+Outubro Movimente,LIVE ATIVIDADES FÍSICAS E PREVENÇÃO DE CÂNCER,MT SAÚDE,Executivo MT,2022,Mulher,Presente,p5515,1,1,0
+Outubro Movimente,ENCERRAMENTO DO DESAFIO DE INOVAÇÃO EM PRÁTICAS PÚBLICAS 2022,MT SAÚDE,Executivo MT,2022,Mulher,Presente,p1168,1,1,0
+Outubro Movimente,MESA 01 POLÍTICAS PÚBLICAS UMA CONSTRUÇÃO ENTRE GOVERNO E CIDADÃO,SEPLAG,Executivo MT,2022,Mulher,Presente,p0206,1,1,0
+Outubro Movimente,MESA 03 INTRAEMPREENDEDORISMO PÚBLICO CULTURA E COMPETÊNCIAS,SEPLAG,Executivo MT,2022,Mulher,Presente,p0206,1,1,0
+Outubro Movimente,MESA 05 DIREITO VISUAL MENOS JURIDIQUÊS E MAIS INCLUSÃO,SEPLAG,Executivo MT,2022,Mulher,Presente,p0206,1,1,0
+Outubro Movimente,MESA 01 POLÍTICAS PÚBLICAS UMA CONSTRUÇÃO ENTRE GOVERNO E CIDADÃO,NÃO IDENTIFICADO,Não identificado,2022,Homem,Presente,p5516,1,1,0
+Outubro Movimente,OFICINA 03 CRIATIVIDADE E GAMIFICAÇÃO,NÃO IDENTIFICADO,Não identificado,2022,Homem,Ausente,p5516,1,0,1
+Outubro Movimente,OFICINA 03 CRIATIVIDADE E GAMIFICAÇÃO,NÃO IDENTIFICADO,Não identificado,2022,Homem,Ausente,p5517,1,0,1
+Outubro Movimente,OFICINA 01 LINGUAGEM SIMPLES NA PRÁTICA,NÃO IDENTIFICADO,Não identificado,2022,Mulher,Presente,p5518,1,1,0
+Outubro Movimente,OFICINA 02 COMO MELHORAR A EXPERIÊNCIA DO USUÁRIO EM SERVIÇOS PÚBLICOS,NÃO IDENTIFICADO,Não identificado,2022,Mulher,Presente,p5518,1,1,0
+Outubro Movimente,MESA 05 DIREITO VISUAL MENOS JURIDIQUÊS E MAIS INCLUSÃO,NÃO IDENTIFICADO,Não identificado,2022,Mulher,Presente,p5518,1,1,0
+Outubro Movimente,ENCERRAMENTO DO DESAFIO DE INOVAÇÃO EM PRÁTICAS PÚBLICAS 2022,SECEL,Executivo MT,2022,Homem,Presente,p5519,1,1,0
+Outubro Movimente,LIVE ATIVIDADES FÍSICAS E PREVENÇÃO DE CÂNCER,SEPLAG,Executivo MT,2022,Homem,Presente,p0374,1,1,0
+Outubro Movimente,LIVE ATIVIDADES FÍSICAS E PREVENÇÃO DE CÂNCER,SEPLAG,Executivo MT,2022,Homem,Presente,p0560,1,1,0
+Outubro Movimente,MESA 05 DIREITO VISUAL MENOS JURIDIQUÊS E MAIS INCLUSÃO,SEPLAG,Executivo MT,2022,Homem,Presente,p0450,1,1,0
+Outubro Movimente,MESA 04 SOCIEDADE DIGITAL,SEPLAG,Executivo MT,2022,Homem,Presente,p1042,1,1,0
+Outubro Movimente,LIVE ATIVIDADES FÍSICAS E PREVENÇÃO DE CÂNCER,NÃO IDENTIFICADO,Não identificado,2022,Mulher,Presente,p5520,1,1,0
+</script>
+<script type="text/csv" data-name="publico_potencial">
+orgao,categoria,grupo,vinculos,validar,observacao
+AGER,COMISSIONADOS,Gestão e Administração,16,1,"exclusivamente comissionados (direção, chefia e assessoramento), em todos os órgãos"
+AGER,GESTORES GOVERN.,Gestão e Administração,1,0,
+AGER,PROC. DO ESTADO,Outros / Não classificados,1,1,carreira jurídica (Procuradores do Estado); nenhum grupo proposto a contempla
+AGER,PROF DESENV ECO SOCI,Gestão e Administração,6,1,carreira ampla e multidisciplinar presente em muitos órgãos; parte atua em áreas finalísticas
+AGER,PROF. ANAL. REGULAD.,Fiscalização e Regulação,45,0,AGER
+AGER,PROF. INDEA,Infraestrutura e Meio Ambiente,1,1,defesa agropecuária; tem forte componente de fiscalização
+AGER,PROF. M. AMBIENTE,Infraestrutura e Meio Ambiente,1,0,
+AGER,PROF. DA AREA MEIO,Gestão e Administração,11,0,
+AGER,PROC SELETIVO SEPLAG,Gestão e Administração,1,1,seletivo temporário da SEPLAG; função não informada
+CASA CIVIL,CARREIRA MILITAR,Segurança Pública,109,0,PM e CBM
+CASA CIVIL,COMISSIONADOS,Gestão e Administração,145,1,"exclusivamente comissionados (direção, chefia e assessoramento), em todos os órgãos"
+CASA CIVIL,GESTORES GOVERN.,Gestão e Administração,2,0,
+CASA CIVIL,NATUREZA ESPECIAL,Outros / Não classificados,2,1,sem classificação segura
+CASA CIVIL,PROC. DO ESTADO,Outros / Não classificados,1,1,carreira jurídica (Procuradores do Estado); nenhum grupo proposto a contempla
+CASA CIVIL,PROF DESENV ECO SOCI,Gestão e Administração,17,1,carreira ampla e multidisciplinar presente em muitos órgãos; parte atua em áreas finalísticas
+CASA CIVIL,PROF. DO SUS,Saúde,3,0,
+CASA CIVIL,PROF. EDUC. BASICA,Educação,4,1,"a categoria reúne docentes e não docentes (TAE e apoio), sem como separar no boletim"
+CASA CIVIL,PROF. INDEA,Infraestrutura e Meio Ambiente,1,1,defesa agropecuária; tem forte componente de fiscalização
+CASA CIVIL,PROF. SIST. NAC.TRAN,Fiscalização e Regulação,2,1,carreiras do trânsito (DETRAN); poderia caber em Infraestrutura (transportes)
+CASA CIVIL,PROF. DA AREA MEIO,Gestão e Administração,21,0,
+CBM,CARREIRA MILITAR,Segurança Pública,1287,0,PM e CBM
+CBM,PROF DESENV ECO SOCI,Gestão e Administração,7,1,carreira ampla e multidisciplinar presente em muitos órgãos; parte atua em áreas finalísticas
+CBM,PROF. DA AREA MEIO,Gestão e Administração,2,0,
+CBM,SERVIDOR REQUISITADO,Outros / Não classificados,128,1,"requisitados de outros entes, carreira de origem não informada; 4.149 dos 4.300 estão na SES (provável atuação na Saúde)"
+CBM,PROC SELETIVO CBM,Segurança Pública,215,1,seletivo temporário do CBM; função não informada
+CGE,AUDIT. DO ESTADO,Fiscalização e Regulação,98,0,auditoria e controle
+CGE,COMISSIONADOS,Gestão e Administração,10,1,"exclusivamente comissionados (direção, chefia e assessoramento), em todos os órgãos"
+CGE,GESTORES GOVERN.,Gestão e Administração,2,0,
+CGE,PROF DESENV ECO SOCI,Gestão e Administração,14,1,carreira ampla e multidisciplinar presente em muitos órgãos; parte atua em áreas finalísticas
+CGE,PROF. DO SUS,Saúde,2,0,
+CGE,PROF. EDUC. BASICA,Educação,5,1,"a categoria reúne docentes e não docentes (TAE e apoio), sem como separar no boletim"
+CGE,PROF. DA AREA MEIO,Gestão e Administração,31,0,
+CGE,PROC SELETIVO SEPLAG,Gestão e Administração,1,1,seletivo temporário da SEPLAG; função não informada
+DETRAN,CARREIRA MILITAR,Segurança Pública,1,0,PM e CBM
+DETRAN,COMISSIONADOS,Gestão e Administração,50,1,"exclusivamente comissionados (direção, chefia e assessoramento), em todos os órgãos"
+DETRAN,CONSELHEIRO,Gestão e Administração,27,1,membros de conselhos
+DETRAN,PROF DESENV ECO SOCI,Gestão e Administração,7,1,carreira ampla e multidisciplinar presente em muitos órgãos; parte atua em áreas finalísticas
+DETRAN,PROF TECNIC EDUC SUP,Educação,1,1,técnicos da educação superior (não docentes)
+DETRAN,PROF. EDUC. BASICA,Educação,2,1,"a categoria reúne docentes e não docentes (TAE e apoio), sem como separar no boletim"
+DETRAN,PROF. SIST. NAC.TRAN,Fiscalização e Regulação,822,1,carreiras do trânsito (DETRAN); poderia caber em Infraestrutura (transportes)
+DETRAN,PROF. DA AREA MEIO,Gestão e Administração,1,0,
+SERMAT,COMISSIONADOS,Gestão e Administração,6,1,"exclusivamente comissionados (direção, chefia e assessoramento), em todos os órgãos"
+SERMAT,PROF TECNIC EDUC SUP,Educação,1,1,técnicos da educação superior (não docentes)
+SERMAT,PROF. DO SUS,Saúde,2,0,
+SERMAT,PROF. DA AREA MEIO,Gestão e Administração,1,0,
+FAPEMAT,COMISSIONADOS,Gestão e Administração,11,1,"exclusivamente comissionados (direção, chefia e assessoramento), em todos os órgãos"
+FAPEMAT,PROF TECNIC EDUC SUP,Educação,3,1,técnicos da educação superior (não docentes)
+FAPEMAT,PROF. DA AREA MEIO,Gestão e Administração,4,0,
+FAPEMAT,PROFES EDUC SUPERIOR,Educação,3,0,
+INDEA,COMISSIONADOS,Gestão e Administração,10,1,"exclusivamente comissionados (direção, chefia e assessoramento), em todos os órgãos"
+INDEA,CONSELHEIRO,Gestão e Administração,11,1,membros de conselhos
+INDEA,PROF DESENV ECO SOCI,Gestão e Administração,13,1,carreira ampla e multidisciplinar presente em muitos órgãos; parte atua em áreas finalísticas
+INDEA,PROF TECNIC EDUC SUP,Educação,1,1,técnicos da educação superior (não docentes)
+INDEA,PROF. DO INTERMAT,Infraestrutura e Meio Ambiente,1,0,terras e desenvolvimento territorial
+INDEA,PROF. EDUC. BASICA,Educação,2,1,"a categoria reúne docentes e não docentes (TAE e apoio), sem como separar no boletim"
+INDEA,PROF. INDEA,Infraestrutura e Meio Ambiente,825,1,defesa agropecuária; tem forte componente de fiscalização
+INDEA,PROF. M. AMBIENTE,Infraestrutura e Meio Ambiente,4,0,
+INDEA,PROF. SIST. NAC.TRAN,Fiscalização e Regulação,2,1,carreiras do trânsito (DETRAN); poderia caber em Infraestrutura (transportes)
+INDEA,PROF. DA AREA MEIO,Gestão e Administração,20,0,
+INDEA,SERVIDOR REQUISITADO,Outros / Não classificados,1,1,"requisitados de outros entes, carreira de origem não informada; 4.149 dos 4.300 estão na SES (provável atuação na Saúde)"
+INDEA,SERVIDORES PCCS/92,Outros / Não classificados,4,1,"plano de 1992 em extinção, sem detalhe de função"
+INTERMAT,COMISSIONADOS,Gestão e Administração,46,1,"exclusivamente comissionados (direção, chefia e assessoramento), em todos os órgãos"
+INTERMAT,GESTORES GOVERN.,Gestão e Administração,1,0,
+INTERMAT,GRUPO TAF,Fiscalização e Regulação,1,0,"tributação, arrecadação e fiscalização"
+INTERMAT,PROF DESENV ECO SOCI,Gestão e Administração,7,1,carreira ampla e multidisciplinar presente em muitos órgãos; parte atua em áreas finalísticas
+INTERMAT,PROF. DO INTERMAT,Infraestrutura e Meio Ambiente,110,0,terras e desenvolvimento territorial
+INTERMAT,PROF. M. AMBIENTE,Infraestrutura e Meio Ambiente,1,0,
+INTERMAT,PROF. SIST. NAC.TRAN,Fiscalização e Regulação,1,1,carreiras do trânsito (DETRAN); poderia caber em Infraestrutura (transportes)
+INTERMAT,PROF. DA AREA MEIO,Gestão e Administração,7,0,
+INTERMAT,PROC SELETIVO SEPLAG,Gestão e Administração,1,1,seletivo temporário da SEPLAG; função não informada
+IPEM,COMISSIONADOS,Gestão e Administração,13,1,"exclusivamente comissionados (direção, chefia e assessoramento), em todos os órgãos"
+IPEM,PROF DESENV ECO SOCI,Gestão e Administração,3,1,carreira ampla e multidisciplinar presente em muitos órgãos; parte atua em áreas finalísticas
+IPEM,PROF METROL QUAL IND,Fiscalização e Regulação,50,0,metrologia (IPEM)
+IPEM,PROF. DO SUS,Saúde,1,0,
+IPEM,PROF. DA AREA MEIO,Gestão e Administração,5,0,
+JUCEMAT,COMISSIONADOS,Gestão e Administração,20,1,"exclusivamente comissionados (direção, chefia e assessoramento), em todos os órgãos"
+JUCEMAT,CONSELHEIRO,Gestão e Administração,16,1,membros de conselhos
+JUCEMAT,PROF DESENV ECO SOCI,Gestão e Administração,47,1,carreira ampla e multidisciplinar presente em muitos órgãos; parte atua em áreas finalísticas
+MT SAÚDE,COMISSIONADOS,Gestão e Administração,23,1,"exclusivamente comissionados (direção, chefia e assessoramento), em todos os órgãos"
+MT SAÚDE,GESTORES GOVERN.,Gestão e Administração,1,0,
+MT SAÚDE,PROF DESENV ECO SOCI,Gestão e Administração,15,1,carreira ampla e multidisciplinar presente em muitos órgãos; parte atua em áreas finalísticas
+MT SAÚDE,PROF. DO SUS,Saúde,1,0,
+MT SAÚDE,PROF. EDUC. BASICA,Educação,1,1,"a categoria reúne docentes e não docentes (TAE e apoio), sem como separar no boletim"
+MT SAÚDE,PROF. DA AREA MEIO,Gestão e Administração,8,0,
+MT SAÚDE,SERVIDOR REQUISITADO,Outros / Não classificados,1,1,"requisitados de outros entes, carreira de origem não informada; 4.149 dos 4.300 estão na SES (provável atuação na Saúde)"
+MTPREV,AUDIT. DO ESTADO,Fiscalização e Regulação,1,0,auditoria e controle
+MTPREV,COMISSIONADOS,Gestão e Administração,27,1,"exclusivamente comissionados (direção, chefia e assessoramento), em todos os órgãos"
+MTPREV,GESTORES GOVERN.,Gestão e Administração,3,0,
+MTPREV,GRUPO TAF,Fiscalização e Regulação,2,0,"tributação, arrecadação e fiscalização"
+MTPREV,PROC. DO ESTADO,Outros / Não classificados,3,1,carreira jurídica (Procuradores do Estado); nenhum grupo proposto a contempla
+MTPREV,PROF DESENV ECO SOCI,Gestão e Administração,39,1,carreira ampla e multidisciplinar presente em muitos órgãos; parte atua em áreas finalísticas
+MTPREV,PROF TECNIC EDUC SUP,Educação,1,1,técnicos da educação superior (não docentes)
+MTPREV,PROF. DO SUS,Saúde,2,0,
+MTPREV,PROF. EDUC. BASICA,Educação,4,1,"a categoria reúne docentes e não docentes (TAE e apoio), sem como separar no boletim"
+MTPREV,PROF. DA AREA MEIO,Gestão e Administração,50,0,
+FUNAC,COMISSIONADOS,Gestão e Administração,6,1,"exclusivamente comissionados (direção, chefia e assessoramento), em todos os órgãos"
+FUNAC,PROF DESENV ECO SOCI,Gestão e Administração,6,1,carreira ampla e multidisciplinar presente em muitos órgãos; parte atua em áreas finalísticas
+FUNAC,PROF SIST SOC EDUC,Desenvolvimento Social e Econômico,2,1,sistema socioeducativo (SEJUS); não é administração penitenciária
+FUNAC,PROF. S. PENITENCIAR,Sistema Penitenciário,29,0,
+FUNAC,PROF. DA AREA MEIO,Gestão e Administração,4,0,
+PGE,CARREIRA MILITAR,Segurança Pública,2,0,PM e CBM
+PGE,COMISSIONADOS,Gestão e Administração,187,1,"exclusivamente comissionados (direção, chefia e assessoramento), em todos os órgãos"
+PGE,PROC. DO ESTADO,Outros / Não classificados,96,1,carreira jurídica (Procuradores do Estado); nenhum grupo proposto a contempla
+PGE,PROF DESENV ECO SOCI,Gestão e Administração,35,1,carreira ampla e multidisciplinar presente em muitos órgãos; parte atua em áreas finalísticas
+PGE,PROF. DO SUS,Saúde,1,0,
+PGE,PROF. EDUC. BASICA,Educação,1,1,"a categoria reúne docentes e não docentes (TAE e apoio), sem como separar no boletim"
+PGE,PROF. M. AMBIENTE,Infraestrutura e Meio Ambiente,5,0,
+PGE,PROF. Q. ADM. PGE,Gestão e Administração,40,0,quadro administrativo da PGE
+PGE,PROF. DA AREA MEIO,Gestão e Administração,41,0,
+PJC,COMISSIONADOS,Gestão e Administração,3,1,"exclusivamente comissionados (direção, chefia e assessoramento), em todos os órgãos"
+PJC,POLICIA CIVIL,Segurança Pública,3147,0,
+PJC,PROF DESENV ECO SOCI,Gestão e Administração,50,1,carreira ampla e multidisciplinar presente em muitos órgãos; parte atua em áreas finalísticas
+PJC,PROF. DO SUS,Saúde,1,0,
+PJC,PROF. EDUC. BASICA,Educação,2,1,"a categoria reúne docentes e não docentes (TAE e apoio), sem como separar no boletim"
+PJC,PROF. M. AMBIENTE,Infraestrutura e Meio Ambiente,1,0,
+PJC,PROF. S. PENITENCIAR,Sistema Penitenciário,11,0,
+PJC,PROF. DA AREA MEIO,Gestão e Administração,11,0,
+PJC,PROC SELETIVO SEPLAG,Gestão e Administração,5,1,seletivo temporário da SEPLAG; função não informada
+PM,CARREIRA MILITAR,Segurança Pública,6623,0,PM e CBM
+PM,POLICIA TECNICA,Segurança Pública,1,0,POLITEC
+PM,PROF DESENV ECO SOCI,Gestão e Administração,15,1,carreira ampla e multidisciplinar presente em muitos órgãos; parte atua em áreas finalísticas
+PM,PROF SIST SOC EDUC,Desenvolvimento Social e Econômico,2,1,sistema socioeducativo (SEJUS); não é administração penitenciária
+PM,PROF. DO SUS,Saúde,1,0,
+PM,PROF. INDEA,Infraestrutura e Meio Ambiente,1,1,defesa agropecuária; tem forte componente de fiscalização
+PM,PROF. DA AREA MEIO,Gestão e Administração,1,0,
+PM,PROC SELETIVO SEPLAG,Gestão e Administração,1,1,seletivo temporário da SEPLAG; função não informada
+POLITEC,COMISSIONADOS,Gestão e Administração,9,1,"exclusivamente comissionados (direção, chefia e assessoramento), em todos os órgãos"
+POLITEC,POLICIA TECNICA,Segurança Pública,667,0,POLITEC
+POLITEC,PROF DESENV ECO SOCI,Gestão e Administração,108,1,carreira ampla e multidisciplinar presente em muitos órgãos; parte atua em áreas finalísticas
+POLITEC,PROF SIST SOC EDUC,Desenvolvimento Social e Econômico,1,1,sistema socioeducativo (SEJUS); não é administração penitenciária
+POLITEC,PROF TECNIC EDUC SUP,Educação,1,1,técnicos da educação superior (não docentes)
+POLITEC,PROF. EDUC. BASICA,Educação,5,1,"a categoria reúne docentes e não docentes (TAE e apoio), sem como separar no boletim"
+POLITEC,PROF. S. PENITENCIAR,Sistema Penitenciário,2,0,
+POLITEC,PROF. SIST. NAC.TRAN,Fiscalização e Regulação,1,1,carreiras do trânsito (DETRAN); poderia caber em Infraestrutura (transportes)
+POLITEC,PROF. DA AREA MEIO,Gestão e Administração,8,0,
+POLITEC,PRO SEL 01/2024/SESP,Segurança Pública,1,1,seletivo temporário da SESP; função não informada
+POLITEC,PROC SELETIVO SEPLAG,Gestão e Administração,1,1,seletivo temporário da SEPLAG; função não informada
+SEAF,COMISSIONADOS,Gestão e Administração,32,1,"exclusivamente comissionados (direção, chefia e assessoramento), em todos os órgãos"
+SEAF,GESTORES GOVERN.,Gestão e Administração,2,0,
+SEAF,PROF DESENV ECO SOCI,Gestão e Administração,20,1,carreira ampla e multidisciplinar presente em muitos órgãos; parte atua em áreas finalísticas
+SEAF,PROF. EDUC. BASICA,Educação,4,1,"a categoria reúne docentes e não docentes (TAE e apoio), sem como separar no boletim"
+SEAF,PROF. INDEA,Infraestrutura e Meio Ambiente,3,1,defesa agropecuária; tem forte componente de fiscalização
+SEAF,PROF. M. AMBIENTE,Infraestrutura e Meio Ambiente,1,0,
+SEAF,PROF. DA AREA MEIO,Gestão e Administração,14,0,
+SEAF,SERVIDOR REQUISITADO,Outros / Não classificados,1,1,"requisitados de outros entes, carreira de origem não informada; 4.149 dos 4.300 estão na SES (provável atuação na Saúde)"
+SECEL,COMISSIONADOS,Gestão e Administração,64,1,"exclusivamente comissionados (direção, chefia e assessoramento), em todos os órgãos"
+SECEL,GESTORES GOVERN.,Gestão e Administração,1,0,
+SECEL,PROC. DO ESTADO,Outros / Não classificados,1,1,carreira jurídica (Procuradores do Estado); nenhum grupo proposto a contempla
+SECEL,PROF DESENV ECO SOCI,Gestão e Administração,88,1,carreira ampla e multidisciplinar presente em muitos órgãos; parte atua em áreas finalísticas
+SECEL,PROF. DO SUS,Saúde,1,0,
+SECEL,PROF. EDUC. BASICA,Educação,12,1,"a categoria reúne docentes e não docentes (TAE e apoio), sem como separar no boletim"
+SECEL,PROF. INDEA,Infraestrutura e Meio Ambiente,1,1,defesa agropecuária; tem forte componente de fiscalização
+SECEL,PROF. DA AREA MEIO,Gestão e Administração,19,0,
+SECEL,PROFES EDUC SUPERIOR,Educação,1,0,
+SECEL,SERVIDOR REQUISITADO,Outros / Não classificados,1,1,"requisitados de outros entes, carreira de origem não informada; 4.149 dos 4.300 estão na SES (provável atuação na Saúde)"
+SECITECI,COMISSIONADOS,Gestão e Administração,111,1,"exclusivamente comissionados (direção, chefia e assessoramento), em todos os órgãos"
+SECITECI,PROF DESENV ECO SOCI,Gestão e Administração,13,1,carreira ampla e multidisciplinar presente em muitos órgãos; parte atua em áreas finalísticas
+SECITECI,PROF TECNIC EDUC SUP,Educação,3,1,técnicos da educação superior (não docentes)
+SECITECI,PROF. CEPROTEC,Educação,412,0,educação profissional e tecnológica
+SECITECI,PROF. EDUC. BASICA,Educação,24,1,"a categoria reúne docentes e não docentes (TAE e apoio), sem como separar no boletim"
+SECITECI,PROF. S. PENITENCIAR,Sistema Penitenciário,3,0,
+SECITECI,PROF. DA AREA MEIO,Gestão e Administração,13,0,
+SECITECI,PROFES EDUC SUPERIOR,Educação,6,0,
+SECOM,COMISSIONADOS,Gestão e Administração,81,1,"exclusivamente comissionados (direção, chefia e assessoramento), em todos os órgãos"
+SECOM,PROF DESENV ECO SOCI,Gestão e Administração,6,1,carreira ampla e multidisciplinar presente em muitos órgãos; parte atua em áreas finalísticas
+SECOM,PROF. CEPROTEC,Educação,1,0,educação profissional e tecnológica
+SECOM,PROF. DA AREA MEIO,Gestão e Administração,3,0,
+SEDEC,COMISSIONADOS,Gestão e Administração,84,1,"exclusivamente comissionados (direção, chefia e assessoramento), em todos os órgãos"
+SEDEC,GESTORES GOVERN.,Gestão e Administração,1,0,
+SEDEC,PROC. DO ESTADO,Outros / Não classificados,1,1,carreira jurídica (Procuradores do Estado); nenhum grupo proposto a contempla
+SEDEC,PROF DESENV ECO SOCI,Gestão e Administração,65,1,carreira ampla e multidisciplinar presente em muitos órgãos; parte atua em áreas finalísticas
+SEDEC,PROF. ANAL. REGULAD.,Fiscalização e Regulação,1,0,AGER
+SEDEC,PROF. EDUC. BASICA,Educação,1,1,"a categoria reúne docentes e não docentes (TAE e apoio), sem como separar no boletim"
+SEDEC,PROF. INDEA,Infraestrutura e Meio Ambiente,2,1,defesa agropecuária; tem forte componente de fiscalização
+SEDEC,PROF. M. AMBIENTE,Infraestrutura e Meio Ambiente,2,0,
+SEDEC,PROF. DA AREA MEIO,Gestão e Administração,28,0,
+SEDUC,COMISSIONADOS,Gestão e Administração,23,1,"exclusivamente comissionados (direção, chefia e assessoramento), em todos os órgãos"
+SEDUC,CONSELHEIRO,Gestão e Administração,3,1,membros de conselhos
+SEDUC,GESTORES GOVERN.,Gestão e Administração,4,0,
+SEDUC,MAGISTERIO,Educação,5,0,
+SEDUC,PROC. DO ESTADO,Outros / Não classificados,2,1,carreira jurídica (Procuradores do Estado); nenhum grupo proposto a contempla
+SEDUC,PROF DESENV ECO SOCI,Gestão e Administração,1784,1,carreira ampla e multidisciplinar presente em muitos órgãos; parte atua em áreas finalísticas
+SEDUC,PROF TECNIC EDUC SUP,Educação,1,1,técnicos da educação superior (não docentes)
+SEDUC,PROF. CEPROTEC,Educação,1,0,educação profissional e tecnológica
+SEDUC,PROF. DO INTERMAT,Infraestrutura e Meio Ambiente,2,0,terras e desenvolvimento territorial
+SEDUC,PROF. EDUC. BASICA,Educação,43896,1,"a categoria reúne docentes e não docentes (TAE e apoio), sem como separar no boletim"
+SEDUC,PROF. S. PENITENCIAR,Sistema Penitenciário,1,0,
+SEDUC,PROF. DA AREA MEIO,Gestão e Administração,9,0,
+SEDUC,PROFES EDUC SUPERIOR,Educação,1,0,
+SEDUC,SERVIDOR REQUISITADO,Outros / Não classificados,1,1,"requisitados de outros entes, carreira de origem não informada; 4.149 dos 4.300 estão na SES (provável atuação na Saúde)"
+SEDUC,SERVIDORES PCCS/92,Outros / Não classificados,12,1,"plano de 1992 em extinção, sem detalhe de função"
+SEDUC,PRO SEL 8/2024/SEDUC,Educação,389,1,seletivo temporário da SEDUC; função (docente ou apoio) não informada
+SEDUC,PROC SELETIVO SEPLAG,Gestão e Administração,1,1,seletivo temporário da SEPLAG; função não informada
+SEFAZ,AG. ADM. FAZENDARIA,Fiscalização e Regulação,155,1,carreira de apoio da administração fazendária; pode caber em Gestão e Administração
+SEFAZ,CARREIRA MILITAR,Segurança Pública,1,0,PM e CBM
+SEFAZ,COMISSIONADOS,Gestão e Administração,52,1,"exclusivamente comissionados (direção, chefia e assessoramento), em todos os órgãos"
+SEFAZ,CONSELHEIRO,Gestão e Administração,1,1,membros de conselhos
+SEFAZ,GESTORES GOVERN.,Gestão e Administração,2,0,
+SEFAZ,GRUPO TAF,Fiscalização e Regulação,504,0,"tributação, arrecadação e fiscalização"
+SEFAZ,PROC. DO ESTADO,Outros / Não classificados,2,1,carreira jurídica (Procuradores do Estado); nenhum grupo proposto a contempla
+SEFAZ,PROF DESENV ECO SOCI,Gestão e Administração,94,1,carreira ampla e multidisciplinar presente em muitos órgãos; parte atua em áreas finalísticas
+SEFAZ,PROF TECNIC EDUC SUP,Educação,1,1,técnicos da educação superior (não docentes)
+SEFAZ,PROF. Q. ADM. PGE,Gestão e Administração,1,0,quadro administrativo da PGE
+SEFAZ,PROF. DA AREA MEIO,Gestão e Administração,353,0,
+SEFAZ,SERVIDOR REQUISITADO,Outros / Não classificados,1,1,"requisitados de outros entes, carreira de origem não informada; 4.149 dos 4.300 estão na SES (provável atuação na Saúde)"
+SEJUS,CARREIRA MILITAR,Segurança Pública,1,0,PM e CBM
+SEJUS,COMISSIONADOS,Gestão e Administração,2,1,"exclusivamente comissionados (direção, chefia e assessoramento), em todos os órgãos"
+SEJUS,CONSELHEIRO,Gestão e Administração,8,1,membros de conselhos
+SEJUS,GESTORES GOVERN.,Gestão e Administração,1,0,
+SEJUS,POLICIA CIVIL,Segurança Pública,7,0,
+SEJUS,PROF DESENV ECO SOCI,Gestão e Administração,37,1,carreira ampla e multidisciplinar presente em muitos órgãos; parte atua em áreas finalísticas
+SEJUS,PROF SIST SOC EDUC,Desenvolvimento Social e Econômico,744,1,sistema socioeducativo (SEJUS); não é administração penitenciária
+SEJUS,PROF. DO SUS,Saúde,1,0,
+SEJUS,PROF. EDUC. BASICA,Educação,2,1,"a categoria reúne docentes e não docentes (TAE e apoio), sem como separar no boletim"
+SEJUS,PROF. S. PENITENCIAR,Sistema Penitenciário,3186,0,
+SEJUS,PROF. SIST. NAC.TRAN,Fiscalização e Regulação,1,1,carreiras do trânsito (DETRAN); poderia caber em Infraestrutura (transportes)
+SEJUS,PROF. DA AREA MEIO,Gestão e Administração,11,0,
+SEMA,CARREIRA MILITAR,Segurança Pública,9,0,PM e CBM
+SEMA,COMISSIONADOS,Gestão e Administração,126,1,"exclusivamente comissionados (direção, chefia e assessoramento), em todos os órgãos"
+SEMA,CONSELHEIRO,Gestão e Administração,4,1,membros de conselhos
+SEMA,GESTORES GOVERN.,Gestão e Administração,1,0,
+SEMA,POLICIA CIVIL,Segurança Pública,1,0,
+SEMA,PROF DESENV ECO SOCI,Gestão e Administração,115,1,carreira ampla e multidisciplinar presente em muitos órgãos; parte atua em áreas finalísticas
+SEMA,PROF. INDEA,Infraestrutura e Meio Ambiente,2,1,defesa agropecuária; tem forte componente de fiscalização
+SEMA,PROF. M. AMBIENTE,Infraestrutura e Meio Ambiente,613,0,
+SEMA,PROF. Q. ADM. PGE,Gestão e Administração,1,0,quadro administrativo da PGE
+SEMA,PROF. DA AREA MEIO,Gestão e Administração,18,0,
+SEMA,PROFES EDUC SUPERIOR,Educação,3,0,
+SEMA,SERVIDOR REQUISITADO,Outros / Não classificados,1,1,"requisitados de outros entes, carreira de origem não informada; 4.149 dos 4.300 estão na SES (provável atuação na Saúde)"
+SEPLAG,CARREIRA MILITAR,Segurança Pública,3,0,PM e CBM
+SEPLAG,COMISSIONADOS,Gestão e Administração,112,1,"exclusivamente comissionados (direção, chefia e assessoramento), em todos os órgãos"
+SEPLAG,GESTORES GOVERN.,Gestão e Administração,56,0,
+SEPLAG,GRUPO TAF,Fiscalização e Regulação,1,0,"tributação, arrecadação e fiscalização"
+SEPLAG,PROF DEFESA CONSUM,Fiscalização e Regulação,1,0,PROCON
+SEPLAG,PROF DESENV ECO SOCI,Gestão e Administração,233,1,carreira ampla e multidisciplinar presente em muitos órgãos; parte atua em áreas finalísticas
+SEPLAG,PROF SIST SOC EDUC,Desenvolvimento Social e Econômico,1,1,sistema socioeducativo (SEJUS); não é administração penitenciária
+SEPLAG,PROF TECNIC EDUC SUP,Educação,2,1,técnicos da educação superior (não docentes)
+SEPLAG,PROF. CEPROTEC,Educação,1,0,educação profissional e tecnológica
+SEPLAG,PROF. DO INTERMAT,Infraestrutura e Meio Ambiente,9,0,terras e desenvolvimento territorial
+SEPLAG,PROF. DO SUS,Saúde,20,0,
+SEPLAG,PROF. EDUC. BASICA,Educação,8,1,"a categoria reúne docentes e não docentes (TAE e apoio), sem como separar no boletim"
+SEPLAG,PROF. M. AMBIENTE,Infraestrutura e Meio Ambiente,6,0,
+SEPLAG,PROF. S. PENITENCIAR,Sistema Penitenciário,2,0,
+SEPLAG,PROF. SIST. NAC.TRAN,Fiscalização e Regulação,4,1,carreiras do trânsito (DETRAN); poderia caber em Infraestrutura (transportes)
+SEPLAG,PROF. DA AREA MEIO,Gestão e Administração,318,0,
+SEPLAG,PROFES EDUC SUPERIOR,Educação,2,0,
+SEPLAG,SERVIDOR REQUISITADO,Outros / Não classificados,11,1,"requisitados de outros entes, carreira de origem não informada; 4.149 dos 4.300 estão na SES (provável atuação na Saúde)"
+SEPLAG,SERVIDORES PCCS/92,Outros / Não classificados,3,1,"plano de 1992 em extinção, sem detalhe de função"
+SEPLAG,PROC SELETIVO SEPLAG,Gestão e Administração,48,1,seletivo temporário da SEPLAG; função não informada
+SES,COMISSIONADOS,Gestão e Administração,169,1,"exclusivamente comissionados (direção, chefia e assessoramento), em todos os órgãos"
+SES,GESTORES GOVERN.,Gestão e Administração,4,0,
+SES,PROF DESENV ECO SOCI,Gestão e Administração,20,1,carreira ampla e multidisciplinar presente em muitos órgãos; parte atua em áreas finalísticas
+SES,PROF. DO SUS,Saúde,3105,0,
+SES,PROF. EDUC. BASICA,Educação,1,1,"a categoria reúne docentes e não docentes (TAE e apoio), sem como separar no boletim"
+SES,PROF. S. PENITENCIAR,Sistema Penitenciário,3,0,
+SES,PROF. DA AREA MEIO,Gestão e Administração,18,0,
+SES,SERVIDOR REQUISITADO,Outros / Não classificados,4149,1,"requisitados de outros entes, carreira de origem não informada; 4.149 dos 4.300 estão na SES (provável atuação na Saúde)"
+SES,PROC SELETIVO SEPLAG,Gestão e Administração,1,1,seletivo temporário da SEPLAG; função não informada
+SESP,CARREIRA MILITAR,Segurança Pública,327,0,PM e CBM
+SESP,COMISSIONADOS,Gestão e Administração,56,1,"exclusivamente comissionados (direção, chefia e assessoramento), em todos os órgãos"
+SESP,GESTORES GOVERN.,Gestão e Administração,2,0,
+SESP,POLICIA CIVIL,Segurança Pública,51,0,
+SESP,POLICIA TECNICA,Segurança Pública,1,0,POLITEC
+SESP,PROF DESENV ECO SOCI,Gestão e Administração,108,1,carreira ampla e multidisciplinar presente em muitos órgãos; parte atua em áreas finalísticas
+SESP,PROF SIST SOC EDUC,Desenvolvimento Social e Econômico,20,1,sistema socioeducativo (SEJUS); não é administração penitenciária
+SESP,PROF TECNIC EDUC SUP,Educação,1,1,técnicos da educação superior (não docentes)
+SESP,PROF. DO SUS,Saúde,1,0,
+SESP,PROF. EDUC. BASICA,Educação,1,1,"a categoria reúne docentes e não docentes (TAE e apoio), sem como separar no boletim"
+SESP,PROF. S. PENITENCIAR,Sistema Penitenciário,11,0,
+SESP,PROF. SIST. NAC.TRAN,Fiscalização e Regulação,1,1,carreiras do trânsito (DETRAN); poderia caber em Infraestrutura (transportes)
+SESP,PROF. DA AREA MEIO,Gestão e Administração,112,0,
+SESP,SERVIDOR REQUISITADO,Outros / Não classificados,3,1,"requisitados de outros entes, carreira de origem não informada; 4.149 dos 4.300 estão na SES (provável atuação na Saúde)"
+SESP,PRO SEL 01/2024/SESP,Segurança Pública,7,1,seletivo temporário da SESP; função não informada
+SESP,PROC SELETIVO SEPLAG,Gestão e Administração,2,1,seletivo temporário da SEPLAG; função não informada
+SETASC,CARREIRA MILITAR,Segurança Pública,2,0,PM e CBM
+SETASC,COMISSIONADOS,Gestão e Administração,81,1,"exclusivamente comissionados (direção, chefia e assessoramento), em todos os órgãos"
+SETASC,GESTORES GOVERN.,Gestão e Administração,1,0,
+SETASC,PROC. DO ESTADO,Outros / Não classificados,1,1,carreira jurídica (Procuradores do Estado); nenhum grupo proposto a contempla
+SETASC,PROF DEFESA CONSUM,Fiscalização e Regulação,31,0,PROCON
+SETASC,PROF DESENV ECO SOCI,Gestão e Administração,252,1,carreira ampla e multidisciplinar presente em muitos órgãos; parte atua em áreas finalísticas
+SETASC,PROF SIST SOC EDUC,Desenvolvimento Social e Econômico,2,1,sistema socioeducativo (SEJUS); não é administração penitenciária
+SETASC,PROF. CEPROTEC,Educação,1,0,educação profissional e tecnológica
+SETASC,PROF. DO SUS,Saúde,3,0,
+SETASC,PROF. EDUC. BASICA,Educação,3,1,"a categoria reúne docentes e não docentes (TAE e apoio), sem como separar no boletim"
+SETASC,PROF. DA AREA MEIO,Gestão e Administração,19,0,
+SETASC,PROFES EDUC SUPERIOR,Educação,1,0,
+SETASC,SERVIDOR REQUISITADO,Outros / Não classificados,1,1,"requisitados de outros entes, carreira de origem não informada; 4.149 dos 4.300 estão na SES (provável atuação na Saúde)"
+SINFRA,COMISSIONADOS,Gestão e Administração,136,1,"exclusivamente comissionados (direção, chefia e assessoramento), em todos os órgãos"
+SINFRA,CONSELHEIRO,Gestão e Administração,8,1,membros de conselhos
+SINFRA,GESTORES GOVERN.,Gestão e Administração,7,0,
+SINFRA,PROC. DO ESTADO,Outros / Não classificados,2,1,carreira jurídica (Procuradores do Estado); nenhum grupo proposto a contempla
+SINFRA,PROF DESENV ECO SOCI,Gestão e Administração,276,1,carreira ampla e multidisciplinar presente em muitos órgãos; parte atua em áreas finalísticas
+SINFRA,PROF. EDUC. BASICA,Educação,3,1,"a categoria reúne docentes e não docentes (TAE e apoio), sem como separar no boletim"
+SINFRA,PROF. M. AMBIENTE,Infraestrutura e Meio Ambiente,3,0,
+SINFRA,PROF. S. PENITENCIAR,Sistema Penitenciário,1,0,
+SINFRA,PROF. DA AREA MEIO,Gestão e Administração,50,0,
+SINFRA,SERVIDOR REQUISITADO,Outros / Não classificados,1,1,"requisitados de outros entes, carreira de origem não informada; 4.149 dos 4.300 estão na SES (provável atuação na Saúde)"
+UNEMAT,PROF TECNIC EDUC SUP,Educação,717,1,técnicos da educação superior (não docentes)
+UNEMAT,PROF. EDUC. BASICA,Educação,9,1,"a categoria reúne docentes e não docentes (TAE e apoio), sem como separar no boletim"
+UNEMAT,PROF. INDEA,Infraestrutura e Meio Ambiente,1,1,defesa agropecuária; tem forte componente de fiscalização
+UNEMAT,PROF. SIST. NAC.TRAN,Fiscalização e Regulação,2,1,carreiras do trânsito (DETRAN); poderia caber em Infraestrutura (transportes)
+UNEMAT,PROF. DA AREA MEIO,Gestão e Administração,1,0,
+UNEMAT,PROFES EDUC SUPERIOR,Educação,1475,0,
 </script>
 <script type="text/csv" data-name="quadro_orgaos">
 orgao,grande,pessoas,sem_fim,mulheres,mulheres_sem_fim,homens,homens_sem_fim,indefinidos,indefinidos_sem_fim
@@ -19047,6 +20007,68 @@ p5361,PM,1
 p5362,PM,1
 p5364,CGE,1
 p5365,SES,1
+p5366,SEDUC,1
+p5367,PJC,1
+p5368,PJC,1
+p5369,PJC,1
+p5370,PJC,1
+p5374,INDEA,1
+p5375,INDEA,1
+p5376,SESP,1
+p5378,SEDUC,0
+p5379,SESP,1
+p5380,SEMA,1
+p5381,SEFAZ,1
+p5382,SEPLAG,1
+p5385,SES,0
+p5386,SES,1
+p5387,SEFAZ,1
+p5390,PJC,1
+p5391,SES,1
+p5392,SECITECI,1
+p5393,SEJUS,1
+p5394,MT SAÚDE,1
+p5395,SES,1
+p5397,SEJUS,1
+p5399,SEPLAG,0
+p5402,SEFAZ,1
+p5405,SEJUS,1
+p5406,SEMA,1
+p5408,SEJUS,1
+p5410,SEFAZ,1
+p5413,SEMA,1
+p5415,INDEA,1
+p5416,SETASC,1
+p5417,PGE,1
+p5418,SINFRA,1
+p5419,SECITECI,1
+p5421,DETRAN,1
+p5422,DETRAN,1
+p5423,SEDUC,1
+p5424,SETASC,1
+p5426,SEFAZ,1
+p5427,EMPAER,1
+p5429,SEMA,1
+p5451,PJC,1
+p5455,SECEL,1
+p5456,DETRAN,1
+p5459,SEFAZ,1
+p5461,SESP,1
+p5464,SEPLAG,1
+p5467,SES,1
+p5468,POLITEC,1
+p5471,SEJUS,1
+p5473,SEPLAG,1
+p5475,SEPLAG,1
+p5476,SESP,0
+p5479,PGE,1
+p5480,SEJUS,1
+p5491,SEFAZ,0
+p5495,PM,1
+p5499,SEMA,0
+p5509,SINFRA,1
+p5510,SEPLAG,1
+p5516,UNEMAT,1
 </script>
 <script type="text/csv" data-name="gentinova_midia">
 data,ano,plataforma,serie,tipo,titulo,acao,visualizacoes,curtidas,impressoes
@@ -19231,6 +20253,18 @@ Acelera Gov.MT,5ª ed. · OF3 - Proposta de Valor e Criação de MVPs,2026,Ofici
 Outubro Movimente,IDEATHON MT 2026,2026,Palestra ou evento,99,33,,1
 Outubro Movimente,TORNEIO DE VÔLEI,2026,Palestra ou evento,200,200,,1
 Outubro Movimente,PALESTRA DE ENCERRAMENTO A REVOLUÇÃO DA CONEXÃO HUMANA,2026,Palestra ou evento,101,48,,1
+Outubro Movimente,OFICINA OS BENEFÍCIOS DO USO DA IA E SUA APLICAÇÃO NO DIA A DIA DO SERVIÇO PÚBLICO,2023,Oficina,70,70,,1
+Outubro Movimente,LANÇAMENTO OUTUBRO MOVIMENTE 2021,2021,Palestra ou evento,87,87,,1
+Outubro Movimente,LIVE ATIVIDADES FÍSICAS E PREVENÇÃO DE CÂNCER,2022,Palestra ou evento,42,42,,1
+Outubro Movimente,MESA 01 POLÍTICAS PÚBLICAS UMA CONSTRUÇÃO ENTRE GOVERNO E CIDADÃO,2022,Palestra ou evento,42,42,,1
+Outubro Movimente,OFICINA 01 LINGUAGEM SIMPLES NA PRÁTICA,2022,Oficina,38,38,,1
+Outubro Movimente,OFICINA 02 COMO MELHORAR A EXPERIÊNCIA DO USUÁRIO EM SERVIÇOS PÚBLICOS,2022,Oficina,33,33,,1
+Outubro Movimente,MESA 03 INTRAEMPREENDEDORISMO PÚBLICO CULTURA E COMPETÊNCIAS,2022,Palestra ou evento,24,24,,1
+Outubro Movimente,MESA 04 SOCIEDADE DIGITAL,2022,Palestra ou evento,32,32,,1
+Outubro Movimente,MESA 05 DIREITO VISUAL MENOS JURIDIQUÊS E MAIS INCLUSÃO,2022,Palestra ou evento,35,35,,1
+Outubro Movimente,OFICINA 03 CRIATIVIDADE E GAMIFICAÇÃO,2022,Oficina,21,7,,1
+Outubro Movimente,OFICINA 05 DESIGN THINKING EM GOVERNO,2022,Oficina,11,11,,1
+Outubro Movimente,ENCERRAMENTO DO DESAFIO DE INOVAÇÃO EM PRÁTICAS PÚBLICAS 2022,2022,Palestra ou evento,46,46,,1
 </script>
 <script type="text/csv" data-name="acelera_oficinas">
 edicao,ano,ordem,etapa,tema,presentes,participantes
@@ -20290,6 +21324,15 @@ Pesquisa geral 2024,2024,Pesquisa geral 2024,,SESP,"Quero agradecer a iniciativa
 <script>
   // Notas de atualização: a mais recente primeiro. A data/hora da primeira é a "última atualização" do topo.
   const ATUALIZACOES = [
+    { quando: '10/11/2026 às 15h45', itens: [
+      'Nova subaba Alcance › Público potencial: o público do SINOVA por natureza da carreira, com o Boletim de Indicadores de Pessoal 2025 da SEPLAG (servidores ativos por órgão e categoria, novembro de 2025, 81.104 vínculos). Escolha um cenário (universo, sem professores, sem Educação, Saúde, Segurança e Sistema Penitenciário, ou só Gestão e Fiscalização) ou marque os grupos funcionais; veja o público por grupo e por órgão e as categorias de classificação incerta.',
+      'Outubro Movimente 2021 incluído: lançamento (30/09/2021) com presença, as demais respostas da lista como presença sem oficina identificada e as equipes do Desafio de Inovação 2021 como participação, como no Prêmio. O painel agora começa em 2021.',
+      'Outubro Movimente 2022 incluído: 10 ações com relatórios de participação do Teams e listas em papel (oficinas, mesas, a live de abertura e o encerramento do Desafio de Inovação). Ainda faltam a Mesa 02, a Oficina 04 e as inscrições do Desafio.',
+      'Outubro Movimente 2023: entrou a oficina "Os benefícios do uso da IA e sua aplicação no dia a dia do serviço público" (17/10/2023, só lista de presença).',
+      'Filtro Produto com caixas de marcar, como numa planilha: todos marcados por padrão, dá para desmarcar um ou mais (por exemplo, analisar sem o Prêmio), com Marcar todos e Desmarcar todos.',
+      'Sexo: o filtro e os textos mostram só mulheres e homens.',
+      'Corrigida a variação ano a ano quando o ano seguinte não tem participantes.'
+    ] },
     { quando: '10/11/2026 às 10h48', itens: [
       'Outubro Movimente 2026 conferido com a planilha-resumo do evento: entraram a Palestra de Encerramento (101 inscritos, 48 presentes) e as 18 presenças da oficina Comunicação para Resultados. Como a planilha só traz totais, essas presenças contam em inscrições, presenças e comparecimento, mas não em pessoas.',
       'Saíram do Outubro Movimente 2026 as oficinas Do Problema à Solução e Finanças Descomplicadas, que não constam da planilha do evento.',
@@ -20463,6 +21506,20 @@ window.dash = (() => {
     const ordem = { org: { k: 'pres', dir: -1 }, prod: { k: 'pres', dir: -1 }, acao: { k: 'pres', dir: -1 },
       ofano: { k: 'nome', dir: 1 }, ofprod: { k: 'n', dir: -1 }, oflista: { k: 'pres', dir: -1 } };
     let cache = null, cacheOpc = null;
+    // Produtos retirados no filtro "Sem os produtos" (parâmetro sem_produto: nomes separados por |)
+    const excluidos = () => String(dash.params().sem_produto || '').split('|').filter(Boolean);
+    const cacheSem = new Map();
+    // Igual a dash.data(id), sem as linhas dos produtos retirados (só nos conjuntos que têm a coluna produto)
+    function dados(id) {
+      const d = dash.data(id);
+      const ex = excluidos();
+      if (d.status !== 'ok' || !ex.length || !d.data.length || !('produto' in d.data[0])) return d;
+      const chave = ex.join('|'), c = cacheSem.get(id);
+      if (c && c.orig === d.data && c.chave === chave) return c.d;
+      const nd = Object.assign({}, d, { data: d.data.filter((r) => !ex.includes(r.produto)) });
+      cacheSem.set(id, { orig: d.data, chave, d: nd });
+      return nd;
+    }
 
     const filtrosAtivos = () => {
       const p = dash.params();
@@ -20470,7 +21527,7 @@ window.dash = (() => {
     };
 
     function modelo() {
-      const d = dash.data('inscricoes');
+      const d = dados('inscricoes');
       if (d.status !== 'ok') return { status: d.status };
       const p = dash.params();
       const chave = FILTROS.map((f) => p[f] ?? '').join('|');
@@ -20541,7 +21598,7 @@ window.dash = (() => {
 
     // Opções de cada filtro: só as que existem com os OUTROS filtros, com o número de inscrições
     function opcoes(campo) {
-      const d = dash.data('inscricoes');
+      const d = dados('inscricoes');
       if (d.status !== 'ok') return [];
       const p = dash.params();
       const chave = FILTROS.map((f) => p[f] ?? '').join('|');
@@ -20564,7 +21621,7 @@ window.dash = (() => {
       }
       const ultimos = [NI, 'Não identificado', 'Indefinido', OUTRAS];
       const atual = p[campo];
-      const vals = [...cacheOpc.cont[campo].entries()].map(([v, n]) => ({ v, n }));
+      const vals = [...cacheOpc.cont[campo].entries()].map(([v, n]) => ({ v, n })).filter((o) => campo !== 'sexo' || o.v !== 'Indefinido');
       if (atual != null && atual !== '' && !vals.some((o) => String(o.v) === String(atual))) vals.push({ v: atual, n: 0 });
       vals.sort((a, b) => (ultimos.includes(a.v) - ultimos.includes(b.v)) || String(a.v).localeCompare(String(b.v), 'pt-BR', { numeric: true }));
       if (campo === 'ano') vals.reverse();
@@ -20576,7 +21633,7 @@ window.dash = (() => {
     // mudar outro filtro solta a ação se ela deixar de existir.
     function filtrar(campo, valor) {
       const novo = { [campo]: valor == null || valor === '' ? null : valor };
-      const d = dash.data('inscricoes');
+      const d = dados('inscricoes');
       if (d.status === 'ok') {
         const rows = d.data;
         if (campo === 'acao' && novo.acao != null) {
@@ -20820,7 +21877,7 @@ window.dash = (() => {
     // Uma linha pode reunir vários encontros (Elas à Frente: total da edição); "n" diz quantos.
     let cacheEnc = null;
     function encontros() {
-      const d = dash.data('encontros');
+      const d = dados('encontros');
       if (d.status !== 'ok') return { status: d.status };
       const p = dash.params();
       const chave = [p.ano, p.produto, p.acao, p.tipo].join('|');
@@ -20854,7 +21911,7 @@ window.dash = (() => {
       return m;
     }
 
-    return { NI, FILTROS, nf, pf, pesoInsc, pesoMede, participa, encontros, pesoPres, ordem, modelo, opcoes, filtrar, estado, linhaMuted, barrasH, colunasAno, tabela, filtrosAtivos };
+    return { NI, FILTROS, nf, pf, pesoInsc, pesoMede, participa, encontros, pesoPres, ordem, modelo, opcoes, filtrar, estado, linhaMuted, barrasH, colunasAno, tabela, filtrosAtivos, dados, excluidos };
   })();
 
 </script>
@@ -20880,7 +21937,7 @@ window.dash = (() => {
   numero('k-org', (m) => m.orgaos);
   // Rodapé: ano do registro mais antigo, sempre sobre todos os dados (sem filtros)
   dash.draw('ano-inicial', (el) => {
-    const d = dash.data('inscricoes');
+    const d = SP.dados('inscricoes');
     const anos = d.status === 'ok' ? d.data.map((r) => Number(r.ano)).filter(Number.isFinite) : [];
     el.textContent = anos.length ? String(Math.min(...anos)) : '—';
   });
@@ -20903,7 +21960,7 @@ window.dash = (() => {
     if (!m.produto.length) return SP.linhaMuted(el, 'Sem inscrições com esses filtros.');
     SP.barrasH(el, m.produto, 'produto');
   });
-  // Participação por sexo: pizza só com mulheres e homens (Indefinido fora), em porcentagem
+  // Participação por sexo: pizza só com mulheres e homens, em porcentagem
   dash.draw('g-sexo', (el) => {
     const m = SP.modelo();
     if (!SP.estado(el, m.status, true)) return;
@@ -21204,7 +22261,73 @@ window.dash = (() => {
   dash.draw('f-resumo', (el) => {
     const p = dash.params();
     const partes = SP.filtrosAtivos().map((f) => String(p[f]));
+    const sem = SP.excluidos();
+    if (sem.length) {   // mostra o lado mais curto: os produtos que ficaram ou os que saíram
+      const d = dash.data('inscricoes');
+      const todos = d.status === 'ok' ? [...new Set(d.data.map((r) => r.produto).filter(Boolean))] : [];
+      const ficam = todos.filter((x) => !sem.includes(x));
+      partes.push(!ficam.length ? 'nenhum produto' : ficam.length <= sem.length ? ficam.join(', ') : 'sem ' + sem.join(', '));
+    }
     el.textContent = partes.length ? partes.join(' · ') : 'todos os anos, produtos, ações, órgãos e sexos';
+  });
+
+  // Filtro Produto: caixas de marcar com todos os produtos da base (todos marcados = sem filtro)
+  const ORDEM_SEM = ['Prêmio Eficiência e Inovação', 'Acelera Gov.MT', 'Outubro Movimente', 'Jornada da Inovação', 'Elas à Frente', 'GentInova', 'Criativação', 'Outras ações'];
+  const todosProdutos = () => {
+    const d = dash.data('inscricoes');
+    if (d.status !== 'ok') return [];
+    return [...new Set(d.data.map((r) => r.produto).filter(Boolean))]
+      .sort((a, b) => ((ORDEM_SEM.indexOf(a) + 1) || 50) - ((ORDEM_SEM.indexOf(b) + 1) || 50) || a.localeCompare(b));
+  };
+  // Produtos marcados, a partir dos parâmetros (produto = um só; sem_produto = desmarcados)
+  const produtosMarcados = () => {
+    const todos = todosProdutos(), p = dash.params();
+    if (p.produto != null && p.produto !== '') return [String(p.produto)];
+    const sem = SP.excluidos();
+    return todos.filter((x) => !sem.includes(x));
+  };
+  const aplicarProdutos = (marcados) => {
+    const todos = todosProdutos();
+    const novo = { produto: null, sem_produto: null };
+    if (marcados.length === 1) novo.produto = marcados[0];
+    else if (marcados.length < todos.length) novo.sem_produto = todos.filter((x) => !marcados.includes(x)).join('|');
+    const p = dash.params();   // ação de um produto que saiu deixa de valer
+    if (p.acao != null && p.acao !== '') {
+      const d = dash.data('inscricoes');
+      const r = d.status === 'ok' ? d.data.find((x) => String(x.acao) === String(p.acao)) : null;
+      if (!r || !marcados.includes(r.produto)) novo.acao = null;
+    }
+    dash.setParams(novo);
+  };
+  dash.draw('f-produtos', (el) => {
+    const todos = todosProdutos();
+    if (!todos.length) return;
+    const marc = produtosMarcados();
+    const acoes = document.createElement('div'); acoes.className = 'sp-excluir-acoes';
+    for (const [rot, fn] of [['Marcar todos', () => todos], ['Desmarcar todos', () => []]]) {
+      const bt = document.createElement('button'); bt.type = 'button'; bt.textContent = rot;
+      bt.addEventListener('click', () => aplicarProdutos(fn()));
+      acoes.appendChild(bt);
+    }
+    el.replaceChildren(acoes, ...todos.map((p) => {
+      const l = document.createElement('label');
+      const c = document.createElement('input'); c.type = 'checkbox'; c.value = p; c.checked = marc.includes(p);
+      l.append(c, document.createTextNode(p));
+      return l;
+    }));
+  });
+  dash.draw('f-produtos-resumo', (el) => {
+    const todos = todosProdutos(), marc = produtosMarcados();
+    el.textContent = marc.length === todos.length ? 'Todos os produtos' : !marc.length ? 'Nenhum produto'
+      : marc.length === 1 ? marc[0] : marc.length + ' de ' + todos.length + ' produtos';
+    el.title = marc.length && marc.length < todos.length ? marc.join(', ') : '';
+  });
+  document.querySelectorAll('#f-produtos').forEach((box) => {
+    box.addEventListener('change', (ev) => {
+      if (!ev.target.matches('input[type=checkbox]')) return;
+      aplicarProdutos([...box.querySelectorAll('input[type=checkbox]:checked')].map((c) => c.value));
+    });
+    document.addEventListener('click', (ev) => { if (box.open && !box.contains(ev.target)) box.open = false; });
   });
 
   // Aba Insights: análises por pessoa, cruzando anos e programas.
@@ -21218,7 +22341,7 @@ window.dash = (() => {
 
   let cacheIns = null;
   function insights() {
-    const d = dash.data('inscricoes');
+    const d = SP.dados('inscricoes');
     if (d.status !== 'ok') return { status: d.status };
     const p = dash.params();
     const filtros = ['poder', 'orgao', 'sexo'].filter((f) => p[f] != null && p[f] !== '');
@@ -21596,7 +22719,7 @@ window.dash = (() => {
     const sp = rows.filter((r) => r.plataforma === 'Spotify');
     const soma = (lst, k) => lst.reduce((s, r) => s + (Number(r[k]) || 0), 0);
     // inscritos e presentes de cada live, das planilhas
-    const i = dash.data('inscricoes');
+    const i = SP.dados('inscricoes');
     const porAcao = new Map();
     if (i.status === 'ok') for (const r of i.data) {
       if (r.produto !== GENT) continue;
@@ -21704,7 +22827,7 @@ window.dash = (() => {
   // Base da Visão geral: por ano e produto, com todos os filtros menos o de ano (para comparar com o ano anterior)
   let vgCache = null;
   function vgBase() {
-    const d = dash.data('inscricoes');
+    const d = SP.dados('inscricoes');
     if (d.status !== 'ok') return null;
     const p = dash.params();
     const ativos = SP.filtrosAtivos();
@@ -22183,7 +23306,7 @@ window.dash = (() => {
 
   // Permanência: Elas à Frente (frequência de cada participante da turma)
   function ofElas() {
-    const d = dash.data('inscricoes');
+    const d = SP.dados('inscricoes');
     if (d.status !== 'ok') return { status: d.status, edicoes: [] };
     const p = dash.params();
     const rows = d.data.filter((r) => r.produto === 'Elas à Frente' && r.status !== 'Não selecionada' &&
@@ -22319,7 +23442,7 @@ window.dash = (() => {
 
   let satCache = null;
   function satModelo() {
-    const d = dash.data('avaliacoes'), dp = dash.data('avaliacoes_pesquisas');
+    const d = SP.dados('avaliacoes'), dp = SP.dados('avaliacoes_pesquisas');
     if (d.status !== 'ok') return { status: d.status };
     const f = satFiltro();
     const chave = JSON.stringify(f);
@@ -22581,7 +23704,7 @@ window.dash = (() => {
   dash.draw('sat-det-titulo', (el) => { const f = satFiltro(); el.textContent = f.prod ? `Perguntas específicas: ${f.prod}` : 'Perguntas específicas do produto'; });
   dash.draw('sat-det', (el) => {
     const card = el.closest('.sp-card');
-    const d = dash.data('avaliacoes_itens'), f = satFiltro();
+    const d = SP.dados('avaliacoes_itens'), f = satFiltro();
     if (d.status !== 'ok' || !f.prod) { if (card) card.hidden = true; return; }
     const its = d.data.filter((r) => r.produto === f.prod && satPassa(r, f, 'grupo'));
     if (card) card.hidden = !its.length;
@@ -22624,7 +23747,7 @@ window.dash = (() => {
 
   // Depoimentos
   dash.draw('sat-depoimentos', (el) => {
-    const d = dash.data('avaliacoes_depoimentos');
+    const d = SP.dados('avaliacoes_depoimentos');
     if (!SP.estado(el, d.status, true)) return;
     const f = satFiltro();
     const filtrado = f.ano != null || f.prod != null;
@@ -22651,7 +23774,7 @@ window.dash = (() => {
   // Pesquisa geral de 2024 (bloco próprio)
   dash.draw('sat-pg', (el) => {
     const card = el.closest('.sp-card');
-    const d = dash.data('avaliacoes_itens'), f = satFiltro();
+    const d = SP.dados('avaliacoes_itens'), f = satFiltro();
     const mostra = (f.ano == null || f.ano === '2024') && f.prod == null && f.edicao == null;
     if (card) card.hidden = !mostra;
     if (!mostra) return;
@@ -22747,7 +23870,7 @@ window.dash = (() => {
 
   let cacheAlc = null;
   function alcance() {
-    const di = dash.data('inscricoes'), dq = dash.data('quadro_orgaos'), da = dash.data('alcance_pessoas');
+    const di = SP.dados('inscricoes'), dq = dash.data('quadro_orgaos'), da = dash.data('alcance_pessoas');
     for (const d of [di, dq, da]) if (d.status !== 'ok') return { status: d.status };
     const p = dash.params();
     const chave = ['ano', 'produto', 'acao', 'sexo', 'alc_org', 'alc_vinc'].map((f) => p[f] ?? '').join('|');
@@ -22819,7 +23942,7 @@ window.dash = (() => {
       ligadoQualquer.has(r.pessoa) && !liga.has(r.pessoa)).map((r) => r.pessoa)).size;
 
     // Sexo (ignora o filtro de sexo)
-    const porSexo = Object.keys(SEXOS).map((s) => {
+    const porSexo = ['Mulher', 'Homem'].map((s) => {
       const n = [...quadro.values()].reduce((t, q) => t + base(q, s), 0);
       let a = 0;
       const vistos = new Set();
@@ -22849,7 +23972,7 @@ window.dash = (() => {
   alcTexto('ka-quadro-sub', (m) => {
     const partes = [`${m.nOrg} órgãos`];
     if (m.so) partes.push('só vínculos sem data de fim');
-    if (m.sexoF) partes.push(m.sexoF === 'Mulher' ? 'mulheres' : m.sexoF === 'Homem' ? 'homens' : 'sexo indefinido');
+    if (m.sexoF) partes.push(m.sexoF === 'Mulher' ? 'mulheres' : 'homens');
     return partes.join(' · ');
   });
   alcTexto('ka-alc', (m) => pcA(m.total ? m.alc / m.total : null));
@@ -23003,6 +24126,239 @@ window.dash = (() => {
   });
 </script>
 <style>
+  .sp-pub-ctrl { padding: 0; border: 0; background: none; }
+  .sp-pub-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(min(100%, 34rem), 1fr)); gap: var(--cds-gap-lg); align-items: start; }
+  .sp-pub-bloco { display: flex; flex-direction: column; gap: var(--cds-gap-xs); min-width: 0; }
+  .sp-pub-bloco h3 { margin: 0; font-size: var(--cds-font-size-body); font-weight: 600; }
+  .sp-pub-orgaos { max-height: 28rem; overflow-y: auto; }
+  .sp-pub-orgaos thead th { position: sticky; top: 0; background: var(--color-panel); }
+  .sp-pub-validar > summary { cursor: pointer; font-size: var(--cds-font-size-caption); font-weight: 600; color: var(--color-fg); }
+  .sp-pub-validar[open] > summary { margin-bottom: var(--cds-gap-xs); }
+  .sp-pub-validar td.sp-pub-obs { color: var(--color-fg-muted); min-width: 14rem; }
+  .sp-table tr.sp-pub-fora td { color: var(--color-fg-muted); }
+  .sp-pub-ctrl .sp-excluir-lista label.is-parcial { font-style: italic; }
+  .sp-pub-ctrl .sp-excluir-lista { min-width: 0; width: max-content; max-width: min(22rem, calc(100vw - 32px)); }
+  .sp-pub-ctrl .sp-excluir-lista label { white-space: normal; }
+</style>
+<script>
+  // Aba Alcance, bloco "Público potencial por carreira": Boletim de Indicadores de Pessoal 2025 (SEPLAG), Tabela 03.
+  // Parâmetros próprios: pub_cen ('c1'..'c4') e pub_grp (grupos excluídos, índices separados por '-', ou 'nenhum';
+  // quando existe, vale a seleção personalizada). Respeita o filtro "Órgãos comparados" da aba (alc_org).
+  const PUB_GRUPOS = ['Educação', 'Saúde', 'Segurança Pública', 'Sistema Penitenciário', 'Fiscalização e Regulação',
+    'Gestão e Administração', 'Infraestrutura e Meio Ambiente', 'Desenvolvimento Social e Econômico', 'Outros / Não classificados'];
+  const PUB_PROFESSORES = ['PROF. EDUC. BASICA', 'PROFES EDUC SUPERIOR', 'MAGISTERIO'];
+  const PUB_CEN = {
+    c1: { nome: 'Universo total', desc: 'Todos os servidores ativos do boletim.', grupos: [0, 1, 2, 3, 4, 5, 6, 7, 8] },
+    c2: { nome: 'Sem professores', desc: 'Tira as categorias de professores da Educação Básica e Superior (PROF. EDUC. BASICA, PROFES EDUC SUPERIOR e MAGISTERIO). As demais categorias da Educação ficam. Atenção: no boletim, PROF. EDUC. BASICA reúne docentes e não docentes.', grupos: [0, 1, 2, 3, 4, 5, 6, 7, 8], semCat: PUB_PROFESSORES },
+    c3: { nome: 'Sem grupos finalísticos', desc: 'Tira os grupos Educação, Saúde, Segurança Pública e Sistema Penitenciário (as categorias, não os órgãos).', grupos: [4, 5, 6, 7, 8] },
+    c4: { nome: 'Gestão e Fiscalização', desc: 'Só os grupos Gestão e Administração e Fiscalização e Regulação, o núcleo de gestão.', grupos: [4, 5] }
+  };
+  const pubNf = (v) => SP.nf.format(v);
+  const pubPc = (v) => (v == null || !Number.isFinite(v) ? '—' : new Intl.NumberFormat('pt-BR', { style: 'percent', minimumFractionDigits: 1, maximumFractionDigits: 1 }).format(v));
+  const pubEl = (tag, cls, txt) => { const e = document.createElement(tag); if (cls) e.className = cls; if (txt != null) e.textContent = txt; return e; };
+
+  function pubSelecao(p) {
+    if (p.pub_grp != null && p.pub_grp !== '') {
+      const fora = p.pub_grp === 'nenhum' ? [] : String(p.pub_grp).split('-').map(Number).filter((g) => g >= 0 && g < 9);
+      return { cen: 'custom', grupos: new Set(PUB_GRUPOS.map((_, i) => i).filter((i) => !fora.includes(i))), semCat: [] };
+    }
+    const c = PUB_CEN[p.pub_cen] ? p.pub_cen : 'c1';
+    return { cen: c, grupos: new Set(PUB_CEN[c].grupos), semCat: PUB_CEN[c].semCat || [] };
+  }
+
+  let pubCache = null;
+  function publico() {
+    const dp = dash.data('publico_potencial'), dq = dash.data('quadro_orgaos');
+    for (const d of [dp, dq]) if (d.status !== 'ok') return { status: d.status };
+    const p = dash.params();
+    const chave = [p.pub_cen, p.pub_grp, p.alc_org].join('|');
+    if (pubCache && pubCache.dp === dp.data && pubCache.dq === dq.data && pubCache.chave === chave) return pubCache.m;
+    const grande = new Map(dq.data.map((q) => [q.orgao, q.grande === '1']));
+    const orgOk = (o) => (p.alc_org === 'sem' ? !grande.get(o) : p.alc_org === 'so' ? !!grande.get(o) : true);
+    const sel = pubSelecao(p);
+    const linhas = dp.data.filter((r) => orgOk(r.orgao)).map((r) => {
+      const g = PUB_GRUPOS.indexOf(r.grupo);
+      return { ...r, g, n: Number(r.vinculos) || 0, inc: sel.grupos.has(g) && !sel.semCat.includes(r.categoria) };
+    });
+    const universo = linhas.reduce((s, r) => s + r.n, 0);
+    const inc = linhas.filter((r) => r.inc);
+    const total = inc.reduce((s, r) => s + r.n, 0);
+    const grupos = PUB_GRUPOS.map((nome, g) => {
+      const todas = linhas.filter((r) => r.g === g), dentro = todas.filter((r) => r.inc);
+      return { nome, g, n: todas.reduce((s, r) => s + r.n, 0), inc: dentro.reduce((s, r) => s + r.n, 0),
+        estado: !dentro.length ? 'fora' : dentro.length === todas.length ? 'dentro' : 'parcial' };
+    });
+    const porOrg = new Map();
+    for (const r of linhas) {
+      const o = porOrg.get(r.orgao) || { orgao: r.orgao, grande: !!grande.get(r.orgao), tot: 0, pub: 0 };
+      o.tot += r.n; if (r.inc) o.pub += r.n; porOrg.set(r.orgao, o);
+    }
+    const validar = inc.filter((r) => r.validar === '1');
+    const catsInc = new Set(inc.map((r) => r.categoria));
+    const m = { status: 'ok', sel, universo, total, grupos, orgaos: [...porOrg.values()], validar, nCats: catsInc.size,
+      nValidarCats: new Set(validar.map((r) => r.categoria)).size, nValidar: validar.reduce((s, r) => s + r.n, 0) };
+    pubCache = { dp: dp.data, dq: dq.data, chave, m };
+    return m;
+  }
+
+  // Pessoas alcançadas por órgão, da conta da própria aba (filtros de ano, produto, ação, sexo e vínculo)
+  function pubAlcance() {
+    if (typeof alcance !== 'function') return { status: 'error' };
+    const a = alcance();
+    if (a.status !== 'ok') return a;
+    return { status: 'ok', porOrg: new Map(a.orgaos.map((o) => [o.orgao, o.alc])), sexoF: a.sexoF, so: a.so };
+  }
+
+  const pubDraw = (nome, fn, grafico, comAlc) => dash.draw(nome, (el) => {
+    const m = publico();
+    const a = comAlc ? pubAlcance() : { status: 'ok' };
+    const st = m.status !== 'ok' ? m.status : a.status;
+    if (!SP.estado(el, st, grafico !== false)) return;
+    fn(el, m, a);
+  });
+  const pubTexto = (nome, fn, comAlc) => pubDraw(nome, (el, m, a) => { el.textContent = fn(m, a); }, false, comAlc);
+
+  pubTexto('pub-desc', (m) => (m.sel.cen === 'custom'
+    ? 'Seleção personalizada: entram todas as categorias dos grupos marcados.'
+    : PUB_CEN[m.sel.cen].desc));
+  pubTexto('pub-grupos-resumo', (m) => {
+    const d = m.grupos.filter((g) => g.estado !== 'fora');
+    if (d.length === 9 && d.every((g) => g.estado === 'dentro')) return 'Todos os grupos';
+    if (!d.length) return 'Nenhum grupo';
+    const parc = d.filter((g) => g.estado === 'parcial').map((g) => g.nome);
+    const base = d.length === 1 ? d[0].nome : d.length === 9 ? 'Todos os grupos' : `${d.length} de 9 grupos`;
+    return parc.length ? `${base} (${parc.join(', ')} em parte)` : base;
+  });
+  pubTexto('kp-pub', (m) => pubNf(m.total));
+  pubTexto('kp-pub-sub', (m) => `vínculos, ${pubPc(m.universo ? m.total / m.universo : null)} dos ${pubNf(m.universo)} do universo`);
+  pubTexto('kp-red', (m) => pubPc(m.universo ? 1 - m.total / m.universo : null));
+  pubTexto('kp-red-sub', (m) => `${pubNf(m.universo - m.total)} vínculos fora · ${pubNf(m.nCats)} categorias dentro`);
+  pubTexto('kp-alc', (m, a) => {
+    const n = m.orgaos.filter((o) => o.pub > 0).reduce((s, o) => s + (a.porOrg.get(o.orgao) || 0), 0);
+    return pubNf(n);
+  }, true);
+  pubTexto('kp-alc-sub', (m, a) => {
+    const nOrg = m.orgaos.filter((o) => o.pub > 0).length;
+    return `pessoas de todas as carreiras, nos ${nOrg} órgãos com público${a.sexoF ? ' · só ' + (a.sexoF === 'Mulher' ? 'mulheres' : 'homens') : ''}`;
+  }, true);
+
+  // Lista de grupos (checkbox)
+  pubDraw('pub-grupos', (el, m) => {
+    el.replaceChildren();
+    const acoes = pubEl('div', 'sp-excluir-acoes');
+    const bT = pubEl('button', '', 'Marcar todos'); bT.type = 'button';
+    const bN = pubEl('button', '', 'Desmarcar todos'); bN.type = 'button';
+    bT.addEventListener('click', () => dash.setParams({ pub_cen: 'c1', pub_grp: null }));
+    bN.addEventListener('click', () => dash.setParams({ pub_cen: null, pub_grp: PUB_GRUPOS.map((_, i) => i).join('-') }));
+    acoes.append(bT, bN); el.appendChild(acoes);
+    for (const g of m.grupos) {
+      const lb = pubEl('label', g.estado === 'parcial' ? 'is-parcial' : '');
+      const cb = pubEl('input'); cb.type = 'checkbox';
+      cb.checked = g.estado === 'dentro'; cb.indeterminate = g.estado === 'parcial';
+      cb.addEventListener('change', () => {
+        const dentro = new Set(m.grupos.filter((x) => x.estado !== 'fora').map((x) => x.g));
+        if (cb.checked) dentro.add(g.g); else dentro.delete(g.g);
+        const igual = Object.entries(PUB_CEN).find(([, c]) => !c.semCat && c.grupos.length === dentro.size && c.grupos.every((x) => dentro.has(x)));
+        if (igual) dash.setParams({ pub_cen: igual[0], pub_grp: null });
+        else {
+          const fora = PUB_GRUPOS.map((_, i) => i).filter((i) => !dentro.has(i));
+          dash.setParams({ pub_cen: null, pub_grp: fora.length ? fora.join('-') : 'nenhum' });
+        }
+      });
+      lb.append(cb, `${g.nome} (${pubNf(g.n)})`);
+      el.appendChild(lb);
+    }
+    if (m.grupos.some((g) => g.estado === 'parcial')) el.appendChild(pubEl('p', 'sp-excluir-nota', 'Em itálico: grupo com parte das categorias, pelo cenário escolhido.'));
+  }, false);
+
+  // Tabela por grupo
+  pubDraw('tb-pub-grupos', (el, m) => {
+    const t = pubEl('table', 'sp-table');
+    const tr = pubEl('tr');
+    [['Grupo', ''], ['Vínculos', 'num'], ['% do universo', 'num'], ['No público', 'num']].forEach(([c, k]) => tr.appendChild(pubEl('th', k, c)));
+    const th = pubEl('thead'); th.appendChild(tr);
+    const tb = pubEl('tbody');
+    const max = d3.max(m.grupos, (g) => g.n) || 1;
+    for (const g of [...m.grupos].sort((a, b) => b.n - a.n)) {
+      const r = pubEl('tr', g.estado === 'fora' ? 'sp-pub-fora' : '');
+      r.appendChild(pubEl('td', '', g.nome));
+      r.appendChild(pubEl('td', 'num', pubNf(g.n)));
+      const td = pubEl('td', 'num'); const box = pubEl('div', 'sp-pct');
+      box.appendChild(pubEl('span', '', pubPc(m.universo ? g.n / m.universo : null)));
+      const bar = pubEl('span', 'sp-inbar'); const i = pubEl('i');
+      i.style.width = (100 * g.n / max) + '%'; i.style.background = g.estado === 'fora' ? 'var(--color-fg-muted)' : dash.colors[0];
+      bar.appendChild(i); box.appendChild(bar); td.appendChild(box); r.appendChild(td);
+      r.appendChild(pubEl('td', 'num', g.estado === 'fora' ? '—' : pubNf(g.inc)));
+      tb.appendChild(r);
+    }
+    const tf = pubEl('tfoot'); const rt = pubEl('tr');
+    [['Total', ''], [pubNf(m.universo), 'num'], ['100,0%', 'num'], [pubNf(m.total), 'num']].forEach(([c, k]) => rt.appendChild(pubEl('td', k, c)));
+    tf.appendChild(rt); t.append(th, tb, tf); el.replaceChildren(t);
+  });
+
+  // Tabela por órgão (ranking pelo público potencial)
+  pubDraw('tb-pub-orgaos', (el, m, a) => {
+    const t = pubEl('table', 'sp-table');
+    const tr = pubEl('tr');
+    [['Órgão', ''], ['Público potencial', 'num'], ['% do órgão', 'num'], ['% do público', 'num'], ['Alcançadas', 'num'], ['Alcance aproximado', 'num']]
+      .forEach(([c, k]) => tr.appendChild(pubEl('th', k, c)));
+    const th = pubEl('thead'); th.appendChild(tr);
+    const tb = pubEl('tbody');
+    const lista = m.orgaos.filter((o) => o.pub > 0).sort((x, y) => y.pub - x.pub);
+    if (!lista.length) { SP.linhaMuted(el, 'Nenhum vínculo com essa seleção.'); return; }
+    let alcT = 0;
+    for (const o of lista) {
+      const n = a.porOrg.get(o.orgao) || 0; alcT += n;
+      const r = pubEl('tr');
+      r.appendChild(pubEl('td', '', o.grande ? `${o.orgao} •` : o.orgao));
+      r.appendChild(pubEl('td', 'num', pubNf(o.pub)));
+      r.appendChild(pubEl('td', 'num', pubPc(o.tot ? o.pub / o.tot : null)));
+      r.appendChild(pubEl('td', 'num', pubPc(m.total ? o.pub / m.total : null)));
+      r.appendChild(pubEl('td', 'num', pubNf(n)));
+      const ra = o.pub ? n / o.pub : null;
+      r.appendChild(pubEl('td', 'num', ra != null && ra > 1 ? 'acima de 100%' : pubPc(ra)));
+      tb.appendChild(r);
+    }
+    const tf = pubEl('tfoot'); const rt = pubEl('tr');
+    const raT = m.total ? alcT / m.total : null;
+    [['Total', ''], [pubNf(m.total), 'num'], ['', 'num'], ['100,0%', 'num'], [pubNf(alcT), 'num'], [raT != null && raT > 1 ? 'acima de 100%' : pubPc(raT), 'num']]
+      .forEach(([c, k]) => rt.appendChild(pubEl('td', k, c)));
+    tf.appendChild(rt); t.append(th, tb, tf); el.replaceChildren(t);
+  }, true, true);
+
+  // Categorias a validar dentro da seleção
+  pubTexto('pub-validar-resumo', (m) => m.nValidarCats
+    ? `Categorias a validar nesta seleção: ${m.nValidarCats} (${pubNf(m.nValidar)} vínculos, ${pubPc(m.total ? m.nValidar / m.total : null)} do público)`
+    : 'Nenhuma categoria a validar nesta seleção');
+  pubDraw('tb-pub-validar', (el, m) => {
+    if (!m.validar.length) { el.replaceChildren(); return; }
+    const porCat = new Map();
+    for (const r of m.validar) {
+      const c = porCat.get(r.categoria) || { cat: r.categoria, grupo: r.grupo, n: 0, org: 0, obs: r.observacao };
+      c.n += r.n; c.org++; porCat.set(r.categoria, c);
+    }
+    const t = pubEl('table', 'sp-table');
+    const tr = pubEl('tr');
+    [['Categoria', ''], ['Grupo', ''], ['Vínculos', 'num'], ['Órgãos', 'num'], ['Por que validar', '']].forEach(([c, k]) => tr.appendChild(pubEl('th', k, c)));
+    const th = pubEl('thead'); th.appendChild(tr);
+    const tb = pubEl('tbody');
+    for (const c of [...porCat.values()].sort((x, y) => y.n - x.n)) {
+      const r = pubEl('tr');
+      r.append(pubEl('td', '', c.cat), pubEl('td', '', c.grupo), pubEl('td', 'num', pubNf(c.n)), pubEl('td', 'num', pubNf(c.org)), pubEl('td', 'sp-pub-obs', c.obs));
+      tb.appendChild(r);
+    }
+    t.append(th, tb); el.replaceChildren(t);
+  }, false);
+
+  document.querySelectorAll('#f-pub-cen').forEach((s) => s.addEventListener('change', () => {
+    if (s.value !== 'custom') dash.setParams({ pub_cen: s.value === 'c1' ? null : s.value, pub_grp: null });
+  }));
+  dash.onData(() => {
+    const sel = pubSelecao(dash.params());
+    document.querySelectorAll('#f-pub-cen').forEach((s) => { s.value = sel.cen; });
+  });
+</script>
+<style>
   .sp-lead { margin: 0; font-size: var(--cds-font-size-body-lg, 1.125rem); line-height: 1.5; max-width: 62rem; }
   .sp-lead b { font-weight: 600; }
   .sp-vgprod-grupo { margin: var(--cds-gap-sm) 0 2px; font-size: var(--cds-font-size-caption); font-weight: 600; color: var(--color-fg-muted); text-transform: uppercase; letter-spacing: .04em; }
@@ -23025,7 +24381,7 @@ window.dash = (() => {
   // Linhas com os filtros do painel (com ou sem o de ano)
   let vg2Cache = null;
   function vg2() {
-    const d = dash.data('inscricoes');
+    const d = SP.dados('inscricoes');
     if (d.status !== 'ok') return { status: d.status };
     const p = dash.params();
     const ativos = SP.filtrosAtivos();
@@ -23078,7 +24434,7 @@ window.dash = (() => {
   // Variação de participantes entre dois anos completos e seguidos (com os mesmos produtos nos dois)
   function vg2Var(m, a, campo = 'total') {
     const A = m.porAno.find((x) => x.ano === a - 1), B = m.porAno.find((x) => x.ano === a);
-    if (!A || !B || a >= VG2_ABERTO || !A[campo]) return null;
+    if (!A || !B || a >= VG2_ABERTO || !A[campo] || !B[campo]) return null;
     const iguais = A.produtos.size === B.produtos.size && [...A.produtos].every((x) => B.produtos.has(x));
     return { v: B[campo] / A[campo] - 1, iguais };
   }
@@ -23086,7 +24442,7 @@ window.dash = (() => {
   // Parte do quadro do Executivo alcançada (mesma conta da aba Alcance, sem os recortes próprios dela)
   let vgqCache = null;
   function vgQuadro() {
-    const di = dash.data('inscricoes'), dq = dash.data('quadro_orgaos'), da = dash.data('alcance_pessoas');
+    const di = SP.dados('inscricoes'), dq = dash.data('quadro_orgaos'), da = dash.data('alcance_pessoas');
     for (const d of [di, dq, da]) if (d.status !== 'ok') return { status: d.status };
     const p = dash.params();
     const chave = ['ano', 'produto', 'acao', 'sexo', 'poder', 'orgao'].map((f) => p[f] ?? '').join('|');
@@ -23309,7 +24665,7 @@ window.dash = (() => {
   dash.onData(() => {
     document.querySelectorAll('.sp-sw--pres, .sp-sw--c0').forEach((s) => { s.style.background = dash.colors[0]; });
     document.querySelectorAll('.sp-sw--c1').forEach((s) => { s.style.background = dash.colors[1]; });
-    const algum = SP.filtrosAtivos().length > 0;
+    const algum = SP.filtrosAtivos().length > 0 || SP.excluidos().length > 0;
     document.querySelectorAll('#limpar').forEach((b) => { b.disabled = !algum; });
     const m = SP.modelo();
     document.querySelectorAll('.sp-empty').forEach((p) => { p.hidden = !(m.status === 'ok' && m.linhas === 0); });
